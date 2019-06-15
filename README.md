@@ -43,13 +43,15 @@ This repo contains many similar projects to compare performance characteristics 
 | [freertos2_xt](../master/freertos2_xt/readme.md) | Minimal project to investigate the cost of context switching using FreeRTOS and threads. Uses an external timer. | Threads |
 | [mqxmin_xt](../master/mqxmin_xt/readme.md) | Minimal project to investigate the cost of context switching using MQX Lite and threads. Uses an external timer. | Threads |
 
+## Other contents
+
 The repo also contains other resources as follows;
 
-[ProjectConfig.md](ProjectConfig.md) describes the common configuration of the KDS projects that was performed in order to produce the project files listed above. Each project also contains a readme.md with project-specific configuration details.
+[ProjectConfig.md](ProjectConfig.md) describes the common configuration of the KDS projects that was performed in order to produce the project files listed above. (Each project also contains a readme with project-specific configuration details.)
 
 ## Circuit
 
-All the projects use the same simple hardware layout. The external wires connected to the named pins on the K22F development board. 
+All the projects use the same simple hardware layout. The external wires are connected either to the named pins on the K22F development board or to the probe of the Rohde & Schwarz HMO2024 oscilloscope.
 
 ![alt text](coro_min_test_bb.png)
 
