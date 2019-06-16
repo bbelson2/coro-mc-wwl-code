@@ -32,6 +32,21 @@ The following software was used for the development environment.
 | [MQX Lite](https://www.nxp.com/products/no-longer-manufactured/nxp-mqx-lite-real-time-operating-system-rtos:MQXLITE) | 1.1.1 | Real-time operating system |
 | [FreeRTOS](https://www.freertos.org/) | 10.1.1 | Real-time operating system |
 
+## Installation
+
+1. Clone or copy the repo.
+1. Open Kinetis Design Studio with clang/llvm on the PATH (see [ProjectConfig.md](ProjectConfig.md) for details).
+1. (Optional) Create a new workspace.
+1. Import the 4 projects from this repo into the active workspace.
+1. Set the Active Build Configuration for each project as shown in the table below. 
+
+| Project | Configuration |
+|---|---|
+| [k22ptmin_xt](./k22ptmin_xt/readme.md) | DebugLLVM_NS |
+| [k22awaitmin_xt](./k22awaitmin_xt/readme.md) | DebugLLVM_NS |
+| [freertos2_xt](./freertos2_xt/readme.md) | DebugLLVM |
+| [mqxmin_xt](./mqxmin_xt/readme.md) | DebugLLVM |
+
 ## Projects
 
 This repo contains many similar projects to compare performance characteristics using different software environments. The projects are listed below 
