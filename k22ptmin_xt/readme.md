@@ -64,7 +64,7 @@ Follow the instructions in the main [ProjectConfig.md](../ProjectConfig.md) to a
 
 ## Components
 
-Follow the instructions in the main [ProjectConfig.md](../ProjectConfig.md) to change the CPU componentclock speed and to add the Bit1 component.
+Follow the instructions in the main [ProjectConfig.md](../ProjectConfig.md) to change the CPU component clock speed and to add the Bit1 component.
 
 # Project development
 
