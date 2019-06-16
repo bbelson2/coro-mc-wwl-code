@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+  Copyright : 2012 Freescale, Inc. All Rights Reserved.
+
+  This configuration file is a standard interchange file that's format is maintained
+  by Freescale, Inc. The configuration file is a derivative work
+  of the Processor Expert Software technology licensed for use by customers
+  as defined as SOFTWARE in the product's End User License Agreement. This file
+  and format are free to use and distribute for read-only purposes. You do not have
+  the right to create these files or modify this format or use for any purposes other
+  than interchange with the Processor Expert Software technology.
+
+  THIS SOFTWARE IS PROVIDED "AS IS".
+
+  NO WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT
+  LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE APPLY TO THIS SOFTWARE. IN NO EVENT WILL FREESCALE BE LIABLE, WHETHER
+  IN CONTRACT, TORT, OR OTHERWISE, FOR ANY INCIDENTAL, SPECIAL, INDIRECT,
+  CONSEQUENTIAL OR PUNITIVE DAMAGES, INCLUDING, BUT NOT LIMITED TO, DAMAGES FOR
+  ANY LOSS OF USE, LOSS OF TIME, INCONVENIENCE, COMMERCIAL LOSS, OR LOST PROFITS,
+  SAVINGS, OR REVENUES TO THE FULL EXTENT SUCH MAY BE DISCLAIMED BY LAW.
+
+-->
+<export xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ProjectInfoDescription.xsd">
+  <PROCESSOR>
+    <DeviceID>MK22FN512xxx12</DeviceID>
+    <CoreNum>1</CoreNum>
+    <Cores>
+      <Core>
+        <CoreSet>Cortex-M4</CoreSet>
+      </Core>
+    </Cores>
+    <SRAMsize>128k</SRAMsize>
+    <FLASHsize>512k</FLASHsize>
+  </PROCESSOR>
+  <PATHS>
+    <LinkerCommandFile>E:\Source\repos\k64f_coro\mqxmin_xt\Project_Settings\Linker_Files\ProcessorExpert.ld</LinkerCommandFile>
+    <IncludePaths>
+      <Path>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\</Path>
+      <Path>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\config\</Path>
+      <Path>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\kernel\</Path>
+      <Path>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\</Path>
+      <Path>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\core\M4\</Path>
+      <Path>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\compiler\cwgcc\</Path>
+      <Path>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\System\</Path>
+      <Path>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\</Path>
+      <Path>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\IO_Map\</Path>
+      <Path>E:\Freescale\KDS_v3\eclipse\ProcessorExpert\lib\Kinetis\pdd\inc\</Path>
+      <Path>E:\Source\repos\k64f_coro\mqxmin_xt\Sources\</Path>
+      <Path>E:\Source\repos\k64f_coro\mqxmin_xt\Generated_Code\</Path>
+    </IncludePaths>
+    <SourceCodePaths>
+      <Path>E:\Source\repos\k64f_coro\mqxmin_xt\Generated_Code\</Path>
+      <Path>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\config\</Path>
+      <Path>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\kernel\</Path>
+      <Path>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\</Path>
+      <Path>E:\Source\repos\k64f_coro\mqxmin_xt\Project_Settings\Startup_Code\</Path>
+      <Path>E:\Source\repos\k64f_coro\mqxmin_xt\Sources\</Path>
+      <Path>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\System\</Path>
+      <Path>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\core\M4\</Path>
+    </SourceCodePaths>
+  </PATHS>
+  <FILES>
+    <GeneratedCs>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Generated_Code\Bit1.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Generated_Code\BitIoLdd1.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Generated_Code\Cpu.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Generated_Code\MQX1.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Generated_Code\PE_LDD.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Generated_Code\SystemTimer1.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Generated_Code\pin_mux.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\config\task_template_list.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\kernel\idletask.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\kernel\int.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\kernel\klog.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\kernel\lwevent.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\kernel\lwlog.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\kernel\lwmem.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\kernel\lwmsgq.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\kernel\lwsem.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\kernel\lwtimer.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\kernel\mqx_utils.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\kernel\mqxlite.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\kernel\mutex.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\kernel\qu_test.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\kernel\sched.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\kernel\task.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\kernel\time_ticks.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\cortex.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\int_gkis.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\int_inst.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\int_kisr.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\int_pvta.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\int_unx.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\int_vtab.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\int_xcpt.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\mem_zero.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\psp_iinit.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\psp_supp.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\psp_tiad.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\psp_tinm.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\psp_tipr.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\psp_tisu.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\sc_irdyq.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\stack_bu.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\stack_de.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\stack_st.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Project_Settings\Startup_Code\startup.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Sources\Events.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Sources\main.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Sources\mqx_tasks.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\System\CPU_Init.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\System\Peripherals_Init.c</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\System\Vectors.c</PathName>
+    </GeneratedCs>
+    <GeneratedHs>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Generated_Code\Bit1.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Generated_Code\BitIoLdd1.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Generated_Code\CPU_Config.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Generated_Code\Cpu.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Generated_Code\IO_Map.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Generated_Code\Init_Config.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Generated_Code\MQX1.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Generated_Code\PE_Const.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Generated_Code\PE_Error.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Generated_Code\PE_LDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Generated_Code\PE_Types.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Generated_Code\SystemTimer1.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Generated_Code\Vectors_Config.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Generated_Code\pin_mux.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\config\task_template_list.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\config\user_config.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\klog.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\log.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\lwevent.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\lwevent_prv.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\lwlog.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\lwlog_prv.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\lwmem.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\lwmem_prv.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\lwmsgq.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\lwmsgq_prv.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\lwsem.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\lwsem_prv.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\lwtimer.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\lwtimer_prv.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\mqx_cnfg.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\mqx_cpudef.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\mqx_inc.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\mqx_macros.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\mqx_str.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\mqxlite.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\mqxlite_cnfg.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\mqxlite_prv.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\mutex.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\mutex_prv.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\include\queue.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\compiler\cwgcc\asm_mac.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\compiler\cwgcc\comp.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\cortex.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\kinetis.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\psp_comp.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\psp_cpu.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\psp_cpudef.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\psp_prv.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\psp_supp.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\psp_ticks.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\psplite.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\psptypes.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Sources\Events.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Sources\mqx_tasks.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Sources\mqxbuild.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Sources\services.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\IO_Map\MK22F51212.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\ADC_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\CMP_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\CRC_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\DAC_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\DMAMUX_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\DMA_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\EWM_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\FMC_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\FTFA_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\FTM_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\GPIO_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\I2C_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\LLWU_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\LPTMR_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\LPUART_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\MCG_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\MCM_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\OSC_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\PDB_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\PDD_Types.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\PIT_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\PMC_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\PORT_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\RCM_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\RNGA_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\RTC_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\SAI_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\SCB_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\SIM_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\SMC_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\SPI_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\SysTick_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\UART_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\USB_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\VREF_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\PDD\WDOG_PDD.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\System\CPU_Init.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\System\PDD_Includes.h</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\Static_Code\System\Peripherals_Init.h</PathName>
+    </GeneratedHs>
+    <GeneratedASMs>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\core\M4\boot.S</PathName>
+      <PathName>E:\Source\repos\k64f_coro\mqxmin_xt\MQXLITE\psp\cortex_m\core\M4\dispatch.S</PathName>
+    </GeneratedASMs>
+  </FILES>
+  <OPTIONS>
+  </OPTIONS>
+</export>

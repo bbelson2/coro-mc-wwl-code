@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PE_PROJECT_SETTINGS_DOCUMENTATION>
+  <PE_product_version v="version 10.5 for Freescale Microcontrollers" />
+  <PE_core_version v="Processor Expert Version 0521" />
+  <CPU_Bean name="Cpu" type="MK22FN512LH12">
+    <Enabled v="Y" />
+    <Properties>
+      <Component_name v="Cpu" />
+      <CPU_type v="MK22FN512VLH12" />
+      <group name="Low power mode settings">
+        <EmptySection_DummyValue />
+      </group>
+      <group name="Common settings">
+        <Initialization_priority v="minimal priority" />
+        <Watchdog_disable v="yes" />
+        <Utilize_after_reset_values v="default" />
+      </group>
+    </Properties>
+    <Methods>
+      <EmptySection_DummyValue />
+    </Methods>
+    <Events>
+      <Event_module_name v="Events" />
+    </Events>
+    <Compiler v="GNU C Compiler" />
+    <CompilerProperties>
+      <Compiler v="GNU C Compiler" />
+      <enumgroup name="Unhandled vectors" v="One handler for all">
+        <EmptySection_DummyValue />
+      </enumgroup>
+      <boolgroup name="Generate debugger files" v="no" />
+      <group name="Startup">
+        <Add_startup_file v="yes" />
+      </group>
+      <boolgroup name="Generate linker file" v="yes">
+        <Stack_size v="1024" />
+        <Heap_size v="0" />
+        <Set_memory_segments_to_default v="Click to set default &amp;gt;" />
+        <Default_memory_for_interrupts v="INTERNAL FLASH" />
+        <Default_memory_for_code v="INTERNAL FLASH" />
+        <Default_memory_for_data v="INTERNAL RAM" />
+        <list name="ROM/RAM Areas" v="5">
+          <group name="MemoryArea0">
+            <boolgroup name="ROM/RAM Area" v="Enabled">
+              <Name v="m_interrupts" />
+              <Qualifier v="RX" />
+              <Address v="0" />
+              <Size v="408" />
+            </boolgroup>
+          </group>
+          <group name="MemoryArea1">
+            <boolgroup name="ROM/RAM Area" v="Disabled" />
+          </group>
+          <group name="MemoryArea2">
+            <boolgroup name="ROM/RAM Area" v="Enabled">
+              <Name v="m_text" />
+              <Qualifier v="RX" />
+              <Address v="1040" />
+              <Size v="523248" />
+            </boolgroup>
+          </group>
+          <group name="MemoryArea3">
+            <boolgroup name="ROM/RAM Area" v="Enabled">
+              <Name v="m_data" />
+              <Qualifier v="RW" />
+              <Address v="536805376" />
+              <Size v="65536" />
+            </boolgroup>
+          </group>
+          <group name="MemoryArea4">
+            <boolgroup name="ROM/RAM Area" v="Enabled">
+              <Name v="m_data_20000000" />
+              <Qualifier v="RW" />
+              <Address v="536870912" />
+              <Size v="65536" />
+            </boolgroup>
+          </group>
+        </list>
+      </boolgroup>
+    </CompilerProperties>
+  </CPU_Bean>
+  <Bean name="pin_mux" type="PinSettings">
+    <Enabled v="Y" />
+    <Properties>
+      <Component_name v="pin_mux" />
+      <PinSettings_IP_Block v="PinSettings" />
+      <Processor v="MK22FN512LH12" />
+    </Properties>
+    <Methods>
+      <EmptySection_DummyValue />
+    </Methods>
+    <Events>
+      <EmptySection_DummyValue />
+    </Events>
+  </Bean>
+  <Bean name="MQX1" type="MQXLite">
+    <Enabled v="Y" />
+    <Properties>
+      <Component_name v="MQX1" />
+      <MQX_Lite_version v="V1.1.1" />
+      <boolgroup name="Copy source files to project" v="yes">
+        <EmptySection_DummyValue />
+      </boolgroup>
+      <inhrbean type="TimerUnit_LDD">
+        <Enabled v="Y" />
+        <Template v="SystemTimer" />
+        <Properties>
+          <Component_name v="SystemTimer1" />
+          <Module_name v="SysTick" />
+          <Counter v="SYST_CVR" />
+          <Counter_direction v="Down" />
+          <Counter_width v="24 bits" />
+          <Value_type v="Optimal" />
+          <enumgroup name="Input clock source" v="Internal">
+            <Counter_frequency v="Auto select" />
+          </enumgroup>
+          <enumgroup name="Counter restart" v="On-match">
+            <Period_device v="SYST_RVR" />
+            <Period v="5 ms" />
+            <boolgroup name="Interrupt" v="Enabled">
+              <Interrupt v="INT_SysTick" />
+              <Interrupt_priority v="medium priority" />
+            </boolgroup>
+          </enumgroup>
+          <list name="Channel list" v="0">
+            <EmptySection_DummyValue />
+          </list>
+          <group name="Initialization">
+            <Enabled_in_init__code v="no" />
+            <group name="Event mask">
+              <OnCounterRestart v="Enabled" />
+              <OnChannel0 v="Disabled" />
+              <OnChannel1 v="Disabled" />
+              <OnChannel2 v="Disabled" />
+              <OnChannel3 v="Disabled" />
+              <OnChannel4 v="Disabled" />
+              <OnChannel5 v="Disabled" />
+              <OnChannel6 v="Disabled" />
+              <OnChannel7 v="Disabled" />
+            </group>
+          </group>
+        </Properties>
+        <Methods>
+          <Init v="generate code" />
+          <Deinit v="generate code" />
+          <Enable v="generate code" />
+          <Disable v="generate code" />
+          <SetEventMask v="don&amp;apos;t generate code" />
+          <GetEventMask v="don&amp;apos;t generate code" />
+          <GetEventStatus v="don&amp;apos;t generate code" />
+          <SelectInputFrequency v="don&amp;apos;t generate code" />
+          <GetInputFrequencyReal v="don&amp;apos;t generate code" />
+          <GetInputFrequency v="generate code" />
+          <SetPeriodTicks v="don&amp;apos;t generate code" />
+          <GetPeriodTicks v="generate code" />
+          <ResetCounter v="generate code" />
+          <GetCounterValue v="generate code" />
+          <SetOffsetTicks v="don&amp;apos;t generate code" />
+          <GetOffsetTicks v="don&amp;apos;t generate code" />
+          <GetCaptureValue v="don&amp;apos;t generate code" />
+          <SelectOutputAction v="don&amp;apos;t generate code" />
+          <SelectCaptureEdge v="don&amp;apos;t generate code" />
+          <ConnectPin v="don&amp;apos;t generate code" />
+          <SetOperationMode v="don&amp;apos;t generate code" />
+          <GetDriverState v="don&amp;apos;t generate code" />
+        </Methods>
+        <Events>
+          <Event_module_name v="Events" />
+          <event name="OnCounterRestart" v="generate code">
+            <Event_procedure_name v="SystemTimer1_OnCounterRestart" />
+          </event>
+          <event name="OnChannel0" v="don&amp;apos;t generate code" />
+          <event name="OnChannel1" v="don&amp;apos;t generate code" />
+          <event name="OnChannel2" v="don&amp;apos;t generate code" />
+          <event name="OnChannel3" v="don&amp;apos;t generate code" />
+          <event name="OnChannel4" v="don&amp;apos;t generate code" />
+          <event name="OnChannel5" v="don&amp;apos;t generate code" />
+          <event name="OnChannel6" v="don&amp;apos;t generate code" />
+          <event name="OnChannel7" v="don&amp;apos;t generate code" />
+        </Events>
+      </inhrbean>
+      <list name="Task Template List" v="2">
+        <boolgroup name="Task1" v="Enabled">
+          <inhrbean type="MQXLite_task">
+            <Enabled v="Y" />
+            <Template v="Task" />
+            <Properties>
+              <Name v="Task1" />
+              <Entry_point_function v="Task1_task" />
+              <Stack_size v="512" />
+              <Priority v="8" />
+              <Creation_parameter v="0" />
+              <group name="Attributes">
+                <MQX_AUTO_START_TASK v="Enabled" />
+                <MQX_FLOATING_POINT_TASK v="Disabled" />
+              </group>
+            </Properties>
+            <Methods>
+              <EmptySection_DummyValue />
+            </Methods>
+            <Events>
+              <Event_module_name v="mqx_tasks" />
+              <event name="OnTask" v="generate code">
+                <Event_procedure_name v="Task1_task" />
+              </event>
+            </Events>
+          </inhrbean>
+        </boolgroup>
+        <boolgroup name="Task2" v="Enabled">
+          <inhrbean type="MQXLite_task">
+            <Enabled v="Y" />
+            <Template v="Task" />
+            <Properties>
+              <Name v="Task2" />
+              <Entry_point_function v="Task2_task" />
+              <Stack_size v="512" />
+              <Priority v="8" />
+              <Creation_parameter v="0" />
+              <group name="Attributes">
+                <MQX_AUTO_START_TASK v="Enabled" />
+                <MQX_FLOATING_POINT_TASK v="Disabled" />
+              </group>
+            </Properties>
+            <Methods>
+              <EmptySection_DummyValue />
+            </Methods>
+            <Events>
+              <Event_module_name v="mqx_tasks" />
+              <event name="OnTask" v="generate code">
+                <Event_procedure_name v="Task2_task" />
+              </event>
+            </Events>
+          </inhrbean>
+        </boolgroup>
+      </list>
+      <group name="Configuration parameters">
+        <group name="Components">
+          <Lightweight_Semaphores v="yes" />
+          <Lightweight_Events v="no" />
+          <Lightweight_Message_Queues v="no" />
+          <Mutexes v="no" />
+          <Lightweight_Timer v="no" />
+          <Kernel_Logging v="no" />
+          <Lightweight_Memory_Allocation v="no" />
+          <Floating_point_context_saving v="no" />
+        </group>
+        <group name="Interrupts">
+          <Interrupt_stack_size v="256" />
+        </group>
+        <group name="Idle Task">
+          <Use_Idle_Task v="yes" />
+          <Enable_sleep_in_idle v="no" />
+          <Enable_idle_counters v="no" />
+        </group>
+        <group name="User settings">
+          <Definitions>
+            <StrgList><![CDATA[/* Additional settings can be defined in the property User Definitions > Definitions of the MQXLite RTOS component */
+]]></StrgList>
+          </Definitions>
+        </group>
+      </group>
+      <boolgroup name="Manage allocated interrupts" v="Automatically" />
+      <group name="MQX functions">
+        <group name="Critical section">
+          <boolgroup name="User function for entering critical section" v="no" />
+          <boolgroup name="User function for exiting critical section" v="no" />
+        </group>
+      </group>
+    </Properties>
+    <Methods>
+      <_int_default_isr v="generate code" />
+      <_int_disable v="generate code" />
+      <_int_enable v="generate code" />
+      <_int_exception_isr v="generate code" />
+      <_int_get_default_isr v="generate code" />
+      <_int_get_exception_handler v="generate code" />
+      <_int_get_isr v="generate code" />
+      <_int_get_isr_depth v="generate code" />
+      <_int_get_isr_data v="generate code" />
+      <_int_get_kernel_isr v="generate code" />
+      <_int_get_previous_vector_table v="generate code" />
+      <_int_get_vector_table v="generate code" />
+      <_int_install_default_isr v="generate code" />
+      <_int_install_kernel_isr v="generate code" />
+      <_int_install_isr v="generate code" />
+      <_int_install_exception_isr v="generate code" />
+      <_int_install_unexpected_isr v="generate code" />
+      <_int_kernel_isr v="generate code" />
+      <_int_set_exception_handler v="generate code" />
+      <_int_set_isr_data v="generate code" />
+      <_int_set_vector_table v="generate code" />
+      <_int_unexpected_isr v="generate code" />
+      <_klog_create_at v="generate code" />
+      <_klog_get_interrupt_stack_usage v="generate code" />
+      <_klog_get_task_stack_usage v="generate code" />
+      <_klog_control v="generate code" />
+      <_klog_disable_logging_task v="generate code" />
+      <_klog_display v="generate code" />
+      <_klog_enable_logging_task v="generate code" />
+      <_klog_show_stack_usage v="generate code" />
+      <_lwsem_create v="generate code" />
+      <_lwsem_destroy v="generate code" />
+      <_lwsem_poll v="generate code" />
+      <_lwsem_post v="generate code" />
+      <_lwsem_test v="generate code" />
+      <_lwsem_wait v="generate code" />
+      <_lwsem_wait_ticks v="generate code" />
+      <_lwsem_wait_for v="generate code" />
+      <_lwsem_wait_until v="generate code" />
+      <_mem_zero v="generate code" />
+      <_mem_test_and_set v="generate code" />
+      <_mqx_exit v="generate code" />
+      <_mqx_fatal_error v="generate code" />
+      <_mqx_get_counter v="generate code" />
+      <_mqx_get_cpu_type v="generate code" />
+      <_mqx_get_initialization v="generate code" />
+      <_mqx_get_kernel_data v="generate code" />
+      <_mqx_get_exit_handler v="generate code" />
+      <_mqx_get_system_task_id v="generate code" />
+      <_mqx_get_tad_data v="generate code" />
+      <_mqx_idle_task v="generate code" />
+      <_mqx_set_cpu_type v="generate code" />
+      <_mqx_set_exit_handler v="generate code" />
+      <_sched_get_max_priority v="generate code" />
+      <_sched_get_min_priority v="generate code" />
+      <_sched_yield v="generate code" />
+      <_task_abort v="generate code" />
+      <_task_block v="generate code" />
+      <_task_check_stack v="generate code" />
+      <_task_create_at v="generate code" />
+      <_task_destroy v="generate code" />
+      <_task_disable_fp v="generate code" />
+      <_task_enable_fp v="generate code" />
+      <_task_get_creator v="generate code" />
+      <_task_get_environment v="generate code" />
+      <_task_get_exception_handler v="generate code" />
+      <_task_get_error v="generate code" />
+      <_task_get_error_ptr v="generate code" />
+      <_task_get_exit_handler v="generate code" />
+      <_task_get_id_from_name v="generate code" />
+      <_task_get_index_from_id v="generate code" />
+      <_task_get_parameter v="generate code" />
+      <_task_get_parameter_for v="generate code" />
+      <_task_get_processor v="generate code" />
+      <_task_get_priority v="generate code" />
+      <_task_get_td v="generate code" />
+      <_task_get_template_index v="generate code" />
+      <_task_ready v="generate code" />
+      <_task_restart v="generate code" />
+      <_task_set_environment v="generate code" />
+      <_task_set_error v="generate code" />
+      <_task_set_exception_handler v="generate code" />
+      <_task_set_exit_handler v="generate code" />
+      <_task_set_parameter v="generate code" />
+      <_task_set_parameter_for v="generate code" />
+      <_task_set_priority v="generate code" />
+      <_task_stop_preemption v="generate code" />
+      <_task_start_preemption v="generate code" />
+      <_taskq_create v="generate code" />
+      <_taskq_destroy v="generate code" />
+      <_taskq_resume v="generate code" />
+      <_taskq_suspend v="generate code" />
+      <_taskq_suspend_task v="generate code" />
+      <_taskq_test v="generate code" />
+      <_taskq_get_value v="generate code" />
+      <_time_delay_ticks v="generate code" />
+      <_time_diff_ticks v="generate code" />
+      <_time_get_elapsed_ticks v="generate code" />
+      <_time_get_hwticks v="generate code" />
+      <_time_get_hwticks_per_tick v="generate code" />
+      <_time_get_ticks v="generate code" />
+      <_time_get_ticks_per_sec v="generate code" />
+      <_time_init_ticks v="generate code" />
+      <_time_notify_kernel v="generate code" />
+      <_time_set_hwtick_function v="generate code" />
+      <_time_set_hwticks_per_tick v="generate code" />
+      <_time_set_resolution v="generate code" />
+      <_time_set_ticks v="generate code" />
+      <_time_set_ticks_per_sec v="generate code" />
+      <_time_set_timer_vector v="generate code" />
+      <_lwevent_create v="generate code" />
+      <_lwevent_destroy v="generate code" />
+      <_lwevent_set v="generate code" />
+      <_lwevent_set_auto_clear v="generate code" />
+      <_lwevent_clear v="generate code" />
+      <_lwevent_wait_for v="generate code" />
+      <_lwevent_wait_ticks v="generate code" />
+      <_lwevent_wait_until v="generate code" />
+      <_lwevent_get_signalled v="generate code" />
+      <_lwevent_test v="generate code" />
+      <_mutatr_destroy v="generate code" />
+      <_mutatr_get_priority_ceiling v="generate code" />
+      <_mutatr_get_sched_protocol v="generate code" />
+      <_mutatr_get_spin_limit v="generate code" />
+      <_mutatr_get_wait_protocol v="generate code" />
+      <_mutatr_set_priority_ceiling v="generate code" />
+      <_mutatr_set_sched_protocol v="generate code" />
+      <_mutatr_set_spin_limit v="generate code" />
+      <_mutatr_set_wait_protocol v="generate code" />
+      <_mutatr_init v="generate code" />
+      <_mutex_create_component v="generate code" />
+      <_mutex_destroy v="generate code" />
+      <_mutex_get_priority_ceiling v="generate code" />
+      <_mutex_get_wait_count v="generate code" />
+      <_mutex_init v="generate code" />
+      <_mutex_set_priority_ceiling v="generate code" />
+      <_mutex_test v="generate code" />
+      <_mutex_unlock v="generate code" />
+      <_mutex_try_lock v="generate code" />
+      <_lwlog_calculate_size v="generate code" />
+      <_lwlog_create_at v="generate code" />
+      <_lwlog_create_component v="generate code" />
+      <_lwlog_destroy v="generate code" />
+      <_lwlog_disable v="generate code" />
+      <_lwlog_enable v="generate code" />
+      <_lwlog_read v="generate code" />
+      <_lwlog_reset v="generate code" />
+      <_lwlog_test v="generate code" />
+      <_lwlog_write v="generate code" />
+      <_lwmsgq_init v="generate code" />
+      <_lwmsgq_send v="generate code" />
+      <_lwmsgq_receive v="generate code" />
+      <_lwtimer_add_timer_to_queue v="generate code" />
+      <_lwtimer_cancel_period v="generate code" />
+      <_lwtimer_cancel_timer v="generate code" />
+      <_lwtimer_create_periodic_queue v="generate code" />
+      <_lwtimer_test v="generate code" />
+    </Methods>
+    <Events>
+      <EmptySection_DummyValue />
+    </Events>
+  </Bean>
+  <Bean name="Bit1" type="BitIO">
+    <Enabled v="Y" />
+    <Properties>
+      <Component_name v="Bit1" />
+      <Pin_for_I_O v="UART1_RX_TGTMCU" />
+      <inhrbean type="BitIO_LDD">
+        <Enabled v="Y" />
+        <Template v="BitIO_LDD" />
+        <Properties>
+          <Component_name v="BitIoLdd1" />
+          <Pin_for_I_O v="UART1_RX_TGTMCU" />
+          <Direction v="Input/Output" />
+          <group name="Initialization">
+            <Init__direction v="Output" />
+            <Init__value v="0" />
+            <Auto_initialization v="yes" />
+          </group>
+          <Safe_mode v="no" />
+        </Properties>
+        <Methods>
+          <Init v="generate code" />
+          <Deinit v="don&amp;apos;t generate code" />
+          <GetDir v="don&amp;apos;t generate code" />
+          <SetDir v="generate code" />
+          <SetInput v="don&amp;apos;t generate code" />
+          <SetOutput v="don&amp;apos;t generate code" />
+          <GetVal v="generate code" />
+          <PutVal v="generate code" />
+          <ClrVal v="generate code" />
+          <SetVal v="generate code" />
+          <NegVal v="don&amp;apos;t generate code" />
+          <ConnectPin v="don&amp;apos;t generate code" />
+          <GetRawVal v="don&amp;apos;t generate code" />
+        </Methods>
+        <Events>
+          <EmptySection_DummyValue />
+        </Events>
+      </inhrbean>
+      <Direction v="Input/Output" />
+      <group name="Initialization">
+        <Init__direction v="Output" />
+        <Init__value v="0" />
+      </group>
+      <Safe_mode v="no" />
+      <Optimization_for v="speed" />
+    </Properties>
+    <Methods>
+      <GetDir v="don&amp;apos;t generate code" />
+      <SetDir v="generate code" />
+      <SetInput v="don&amp;apos;t generate code" />
+      <SetOutput v="don&amp;apos;t generate code" />
+      <GetVal v="generate code" />
+      <PutVal v="generate code" />
+      <ClrVal v="generate code" />
+      <SetVal v="generate code" />
+      <NegVal v="don&amp;apos;t generate code" />
+      <ConnectPin v="don&amp;apos;t generate code" />
+      <GetRawVal v="don&amp;apos;t generate code" />
+    </Methods>
+    <Events>
+      <EmptySection_DummyValue />
+    </Events>
+  </Bean>
+</PE_PROJECT_SETTINGS_DOCUMENTATION>
+
