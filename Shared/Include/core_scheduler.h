@@ -13,14 +13,20 @@
 
 #pragma once
 
-#include <functional>
+// Uncomment the line below to use std::array<> for task pointers
+// #define SCHEDULER_USE_STL_ARRAY
+
+#if defined(SCHEDULER_USE_STL_ARRAY)
 #include <array>
-#include <algorithm>
+#endif
+#if !defined(COBUILD_NO_SCHEDULER)
 #include <stack>
+#endif
 #include "core_types.h"
 #include "core_resumable.h"
 #include "core_crit_sec.h"
 #include "services.h"
+#include <stddef.h>
 
 /**
  * TODO - improve the efficiency of the task search (?? O(n) and n is tiny)
@@ -29,8 +35,6 @@
 /***************************************************************************/
 /* Task and scheduler                                                      */
 /***************************************************************************/
-
-//#define SCHEDULER_USE_STL_ARRAY
 
 #ifdef SCHEDULER_VERSION_2
 
@@ -98,7 +102,9 @@ namespace scp { namespace core {
 			if (getState() == task_state_t::Blocked) {
 				setState(task_t::task_state_t::Ready);
 			}
+#if !defined(COBUILD_NO_SCHEDULER)
 			coro_call_stack_.push(coro);
+#endif
 		}
 		void resume() {
 #if defined(COBUILD_NO_SCHEDULER)
@@ -120,8 +126,9 @@ namespace scp { namespace core {
 		task_state_t state_;
 		task_priority_t priority_;
 		coroutine_handle<> coro_task_;
-		//std::function<void(void)> coro_task_;
+#if !defined(COBUILD_NO_SCHEDULER)
 		std::stack< coroutine_handle<> > coro_call_stack_;
+#endif
 	};
 
 #ifndef SCHEDULER_MAX_TASKS

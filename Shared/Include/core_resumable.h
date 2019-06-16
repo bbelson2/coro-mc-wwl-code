@@ -22,8 +22,10 @@
 #include <experimental/coroutine>
 #else
 #include <experimental\resumable>
+#ifdef COROUTINE_MEMORY_MANAGED
 #include <new>
 #include <stdlib.h>
+#endif // COROUTINE_MEMORY_MANAGED
 #endif
 
 #include "services.h"
@@ -45,19 +47,7 @@ namespace scp { namespace core {
 			void return_void() {
 			}
 			void unhandled_exception() {}
-			/*
-			template<int sz> 
-			static void* my_alloc()
-			{
-				trace("resumable::new(%lu)\n", sz);
-				return malloc(sz);
-			}
-			void* operator new(std::size_t sz) {
-			// This fails because sz is not available as a constexpr 
-			// when the coroutine is built
-				return my_alloc<sz>();
-			}
-			*/
+#ifdef COROUTINE_MEMORY_MANAGED
 			void* operator new(std::size_t sz) {
 #ifdef SOURCES_SERVICES_H_
 				trace("resumable::new(%lu)\r\n", sz);
@@ -71,6 +61,7 @@ namespace scp { namespace core {
 				if (p)
 					free(p);
 			}
+#endif // COROUTINE_MEMORY_MANAGED
 		};
 		coroutine_handle<promise_type> _coroutine; // = nullptr;
 		resumable() = default;
