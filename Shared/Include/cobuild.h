@@ -12,7 +12,7 @@
 #ifndef SOURCES_INCLUDE_COBUILD_H_
 #define SOURCES_INCLUDE_COBUILD_H_
 
-// Add a definintion to Project Properties > Settings > C++ Compiler > Preprocessor:
+// Add a definition to Project Properties > Settings > C++ Compiler > Preprocessor:
 // e.g.: COBUILD_APP_NAME=\"k22fawait2\"
 
 #ifndef COBUILD_APP_NAME
@@ -65,27 +65,6 @@
 #else
 
 #define COBUILD_MINIMAL_DESCRIPTION "Minimal=false"
-/*
-#ifdef INCLUDE_TEST_TASK
-#undef INCLUDE_TEST_TASK
-#endif
-
-#ifndef INCLUDE_IDLE_TASK
-#define INCLUDE_IDLE_TASK
-#endif
-
-#ifndef INCLUDE_ADC_TASK
-#define INCLUDE_ADC_TASK
-#endif
-
-#ifndef INCLUDE_TIMER_TASK
-#define INCLUDE_TIMER_TASK
-#endif
-
-#ifndef INCLUDE_I2C_TASK
-#define INCLUDE_I2C_TASK
-#endif
-*/
 
 #endif
 

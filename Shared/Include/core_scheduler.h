@@ -18,6 +18,8 @@
 
 #if defined(SCHEDULER_USE_STL_ARRAY)
 #include <array>
+#else
+#include <stddef.h>
 #endif
 #if !defined(COBUILD_NO_SCHEDULER)
 #include <stack>
@@ -26,11 +28,6 @@
 #include "core_resumable.h"
 #include "core_crit_sec.h"
 #include "services.h"
-#include <stddef.h>
-
-/**
- * TODO - improve the efficiency of the task search (?? O(n) and n is tiny)
- */
 
 /***************************************************************************/
 /* Task and scheduler                                                      */

@@ -21,7 +21,7 @@ The following software was used for the development environment.
 | Kinetis Design Studio | 3.2.0 | Integrated development environment, including build system |
 | Processor Expert for Kinetis | 3.0.2 | Code generator |
 | clang  | 8.0.0 | C/C++ compiler, including LLVM toolkit |
-| g++? | ?? | Linker |
+| gcc | 6.3.1 | Linker (arm-none-eabi-g++) |
 
 ### Runtime
 
