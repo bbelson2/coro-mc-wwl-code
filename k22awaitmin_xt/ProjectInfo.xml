@@ -80,8 +80,12 @@
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22awaitmin_xt\Generated_Code\Vectors_Config.h</PathName>
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22awaitmin_xt\Generated_Code\pin_mux.h</PathName>
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22awaitmin_xt\Sources\Events.h</PathName>
+      <PathName>E:\Source\repos\coro-mc-wwl-code\k22awaitmin_xt\Sources\Include\app_ids.h</PathName>
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22awaitmin_xt\Sources\Include\cobuild.h</PathName>
+      <PathName>E:\Source\repos\coro-mc-wwl-code\k22awaitmin_xt\Sources\Include\core_crit_sec.h</PathName>
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22awaitmin_xt\Sources\Include\core_resumable.h</PathName>
+      <PathName>E:\Source\repos\coro-mc-wwl-code\k22awaitmin_xt\Sources\Include\core_scheduler.h</PathName>
+      <PathName>E:\Source\repos\coro-mc-wwl-code\k22awaitmin_xt\Sources\Include\core_types.h</PathName>
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22awaitmin_xt\Sources\Include\services.h</PathName>
       <PathName>E:\Source\repos\coro-mc-wwl-code\Shared\Include\core_crit_sec.h</PathName>
       <PathName>E:\Source\repos\coro-mc-wwl-code\Shared\Include\core_resumable.h</PathName>

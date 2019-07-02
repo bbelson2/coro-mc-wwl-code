@@ -46,6 +46,9 @@ The following software was used for the development environment.
 | [k22awaitmin_xt](./k22awaitmin_xt/readme.md) | DebugLLVM_NS |
 | [freertos2_xt](./freertos2_xt/readme.md) | DebugLLVM |
 | [mqxmin_xt](./mqxmin_xt/readme.md) | DebugLLVM |
+| [k22fawait1](./k22fawait1/readme.md) | DebugLLVMc |
+| [k22fawait2](./k22fawait2/readme.md) | DebugLLVMc |
+| [k22ffsm2](./k22ffsm2/readme.md) | DebugLLVMc |
 
 ## Projects
 
@@ -57,18 +60,31 @@ This repo contains many similar projects to compare performance characteristics 
 | [k22awaitmin_xt](./k22awaitmin_xt/readme.md) | Minimal project to investigate the cost of context switching using `co_await`. Uses an external timer. | Coroutines |
 | [freertos2_xt](./freertos2_xt/readme.md) | Minimal project to investigate the cost of context switching using FreeRTOS and threads. Uses an external timer. | Threads |
 | [mqxmin_xt](./mqxmin_xt/readme.md) | Minimal project to investigate the cost of context switching using MQX Lite and threads. Uses an external timer. | Threads |
+| [k22fawait1](./k22fawait1/readme.md) | Simple project to demonstrate microcontroller application development using `co_await`.  | Coroutines, Lambdas, some STL |
+| [k22fawait2](./k22fawait2/readme.md) | Simple project to demonstrate microcontroller application development using `co_await` (second iteration). | Coroutines |
+| [k22ffsm2](./k22ffsm2/readme.md) | Simple project to compare microcontroller application development using finite state machine against `co_await`. | FSM |
 
 ## Other contents
 
-The repo also contains other resources as follows;
+The repo also contains other resources as follows:
 
 [ProjectConfig.md](ProjectConfig.md) describes the common configuration of the KDS projects that was performed in order to produce the project files listed above. (Each project also contains a readme with project-specific configuration details.)
 
-## Circuit
+[Library.md](Library.md) briefly describes the design and development of the run-time library.
 
-All the projects use the same simple hardware layout. The external wires are connected either to the named pins on the K22F development board or to the probe of the Rohde & Schwarz HMO2024 oscilloscope.
+## Circuits
+
+### Context switching 
+
+All the `*_xt` projects use the same simple hardware layout. The external wires are connected either to the named pins on the K22F development board or to the probe of the Rohde & Schwarz HMO2024 oscilloscope.
 
 ![alt text](coro_min_test_bb.png)
+
+### Applications
+
+The application projects (k22fawait1, k22fawait2 & k22ffsm2) use the same hardware layout. The external wires are connected either to the named pins on the K22F development board and to the pins of an analog PS2 game joystick (e.g. [Thumb Joystick - Sparkfun](https://www.sparkfun.com/products/9032) or [PS2 Game Joystick Module For Arduino - Banggood](https://www.banggood.com/PS2-Game-Joystick-Module-For-Arduino-p-76465.html?cur_warehouse=CN)).
+
+![alt text](coro_app_adc.png)
 
 ## See also
 
