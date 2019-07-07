@@ -110,11 +110,19 @@
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22fawait1\Generated_Code\Term1.h</PathName>
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22fawait1\Generated_Code\Vectors_Config.h</PathName>
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22fawait1\Generated_Code\pin_mux.h</PathName>
+      <PathName>E:\Source\repos\coro-mc-wwl-code\k22fawait1\Shared\Include\api_adc.h</PathName>
+      <PathName>E:\Source\repos\coro-mc-wwl-code\k22fawait1\Shared\Include\api_i2c.h</PathName>
+      <PathName>E:\Source\repos\coro-mc-wwl-code\k22fawait1\Shared\Include\api_timer.h</PathName>
+      <PathName>E:\Source\repos\coro-mc-wwl-code\k22fawait1\Shared\Include\app_ids.h</PathName>
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22fawait1\Shared\Include\cobuild.h</PathName>
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22fawait1\Shared\Include\core_crit_sec.h</PathName>
+      <PathName>E:\Source\repos\coro-mc-wwl-code\k22fawait1\Shared\Include\core_events.h</PathName>
+      <PathName>E:\Source\repos\coro-mc-wwl-code\k22fawait1\Shared\Include\core_future.h</PathName>
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22fawait1\Shared\Include\core_resumable.h</PathName>
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22fawait1\Shared\Include\core_scheduler.h</PathName>
+      <PathName>E:\Source\repos\coro-mc-wwl-code\k22fawait1\Shared\Include\core_split_phase.h</PathName>
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22fawait1\Shared\Include\core_types.h</PathName>
+      <PathName>E:\Source\repos\coro-mc-wwl-code\k22fawait1\Shared\Include\pe_polyfill.h</PathName>
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22fawait1\Shared\Include\services.h</PathName>
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22fawait1\Sources\Events.h</PathName>
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22fawait1\Static_Code\IO_Map\MK22F51212.h</PathName>

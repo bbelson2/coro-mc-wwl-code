@@ -39,6 +39,8 @@ namespace scp { namespace drivers {
 
 using namespace scp::core;
 
+#ifdef I2C_VERSION_1
+
 future_t<byte> write_i2c1(uint8_t slave_address, uint8_t reg, uint8_t data) {
 	promise_t<byte> p;
 	split_phase_event_t(EVENT_ID_I2C_TRANSMIT, [s = p._state]() {
@@ -114,5 +116,78 @@ future_t<byte> read_i2c(uint8_t slave_address, uint8_t reg, uint8_t* data, word 
 	}
 	return p.get_future();
 }
+
+#else // I2C_VERSION_1
+
+// Primitives, each of which is a coroutine
+
+scp::core::future_t<byte> I2C_SendBlock_async(void* Ptr, word Siz, word *Snt) {
+	promise_t<byte> p;
+	split_phase_event_t(EVENT_ID_I2C_TRANSMIT, [s = p._state]() {
+		I2C_SendStop();
+		s->set_value(ERR_OK);
+	}).reg();
+	byte rc = I2C_SendBlock(Ptr, Siz, Snt);
+	if (rc != ERR_OK) {
+		I2C_SendStop();
+		p._state->set_value(rc);
+	}
+	return p.get_future();
+}
+
+scp::core::future_t<byte> I2C_SendChar_async(byte Chr) {
+	promise_t<byte> p;
+	split_phase_event_t(EVENT_ID_I2C_TRANSMIT, [s = p._state]() {
+		s->set_value(0);
+	}).reg();
+	byte rc = I2C_SendChar(Chr);
+	if (rc != ERR_OK) {
+		I2C_SendStop();
+		p._state->set_value(rc);
+	}
+	return p.get_future();
+}
+
+scp::core::future_t<byte> I2C_RecvBlock_async(void* Ptr, word Siz, word *Rcv) {
+	promise_t<byte> p;
+	split_phase_event_t(EVENT_ID_I2C_RECEIVE, [s = p._state]() {
+		I2C_SendStop();
+		s->set_value(ERR_OK);
+	}).reg();
+	byte rc = I2C_RecvBlock(Ptr, Siz, Rcv);
+	if (rc != ERR_OK) {
+		I2C_SendStop();
+		p._state->set_value(rc);
+	}
+	return p.get_future();
+}
+
+// Operations, composed of sync and async primitives
+
+future_t<byte> read_i2c(uint8_t slave_address, uint8_t reg, uint8_t* data, word len) {
+	byte rc = I2C_SelectSlave(slave_address);
+	if (rc == ERR_OK) {
+		rc = co_await I2C_SendChar_async(reg);
+	}
+	if (rc == ERR_OK) {
+		word recv;
+		rc = co_await I2C_RecvBlock_async(data, len, &recv);
+	}
+	I2C_SendStop();
+	co_return rc;
+}
+
+future_t<byte> write_i2c(uint8_t slave_address, uint8_t reg, uint8_t data) {
+	byte rc = I2C_SelectSlave(slave_address);
+	if (rc == ERR_OK) {
+		uint8_t msg [2] = {reg, data};
+		word sent;
+		rc = co_await I2C_SendBlock_async(msg, 2, &sent);
+	}
+	I2C_SendStop();
+	co_return rc;
+}
+
+#endif // !I2C_VERSION_1
 
 } } // namespace scp::drivers

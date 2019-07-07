@@ -235,6 +235,7 @@
 									<listOptionValue builtIn="false" value="INCLUDE_TIMER_TASK"/>
 									<listOptionValue builtIn="false" value="INCLUDE_I2C_TASK"/>
 									<listOptionValue builtIn="false" value="INCLUDE_IDLE_TASK"/>
+									<listOptionValue builtIn="false" value="I2C_VERSION_2"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.cpp.compiler.input.1112385489" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.cpp.compiler.input"/>
 							</tool>

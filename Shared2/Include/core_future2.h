@@ -183,7 +183,7 @@ namespace scp { namespace core {
 		persistent_promise_t(const persistent_promise_t&) = delete;
 		persistent_promise_t(persistent_promise_t&&) = default;
 
-		future2_type get() {
+		future_type get() {
 #ifdef assert
 			assert (!_state._future_acquired && "A future on this promise is already in place");
 #endif
