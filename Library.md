@@ -33,7 +33,7 @@ The application project [k22fawait1](./k22fawait1/readme.md) makes use of these 
 | api_i2c.h/.cpp | Asynchronously read and write to a I2C bus (for use with the development board's accelerometer) |
 | api_timer.h/.cpp | Asynchronous timer event stream |
 
-Fo the application project, application-level test classes were created, based on the HAL code,  including:
+For the application project, application-level test classes were created, based on the HAL code,  including:
 
 | File | Content |
 |---|---|
@@ -47,7 +47,7 @@ The library delivered significant benefits both to the application programmer an
 
 For example, the ADC task could include efficient & transparent asynchronous code such as: 
 
-```
+```c++
 co_await start_adc(ADC_CHANNEL_X);
 co_await start_adc(ADC_CHANNEL_Y);
 
@@ -79,7 +79,7 @@ There are a number of problems with the first iteration.
 
 ### Problem
 
-```
+```c++
 future_t<byte> read_i2c(uint8_t slave_address, 
   uint8_t reg, uint8_t* data, word len) {
   byte rc = I2C_SelectSlave(slave_address);
@@ -103,6 +103,23 @@ Thus the coroutine above attempts to call a constructor for `future_t<>` with al
 
 - Make composition of coroutines work correctly by separating the awaitable classes' core implementation and their awaitable contracts. In particular, the types `future_t::promise_type` and `promise_t<>` must be separated.
 
+### Description
+
+The `future_t<>` awaitable contract was moved to the `std::experimental::coroutine_traits<>` extension class.
+
+```c++
+namespace std { namespace experimental {
+template<class T,
+	class... Args>
+	struct coroutine_traits<future_t<T>, Args...>
+{
+    struct promise_type {
+        promise_t<T> _promise;
+        ...
+    };
+};
+```
+
 ### Benefits
 
 - Composition of coroutines is now functional. 
@@ -116,11 +133,47 @@ The version 1 code appeared correct according to the standard; however, it faile
 ### Objectives
 
 - Remove remaining STL `stack<>`, used for blocked coroutine list.
+- Remove heap dependency of `future_t<>` (the shared state).
 
-### Description
+### Discussion
 
-- Change architecture - add active coroutine stack to `task_t` as a linked list. 
-- All awaitables must now inherit from a class which links to the next .
+#### A linked list for coroutines
+
+We must change the architecture - add active coroutine stack to `task_t`, implemented as a linked list. 
+All awaitables must now inherit from a class which links to the next awaitable.
+
+But which object can become a member of the linked list? The `future<>` is not eligible, because it has move semantics but no copy semantics. Nor is `promise_t<>`, because it is not always created explicitly - the `future_t<>::promise_type` creates the `promise_t<>`.
+It appears that the best (only?) candidate is the shared state class.
+
+#### A heap-free shared state
+
+The shared state is currently created within a counted shared smart pointer, `counted_ptr<state_t>`. The `state_t` is a template parameter of `future_t<>` (and, in parallel, of `promise_t<T, state_t>`).
+
+We can make this arrangement less inflexible by promoting the shared state holder (e.g. `counted_ptr<>`) to become a template argument. This will allow us to use a weak pointer instead of a shared pointer if we wish. Such an arrangement would allow the state to be embedded within the `promise_t<>`, when the promise is static in scope and lifetime.
+
+### Two creation patterns for `future_t<>`
+
+1. Explicitly created in a split-phase coroutine, using `promise_t::get_future()`.
+
+1. Implicitly created during a `co_return` from a coroutine, via `future_t<>::promise_type::get_return_object()`.
+
+First we investigate these in detail, then examine their suitability under the new state architecture.
+
+#### Explicit construction during split-phase
+
+1. During coroutine, `promise_t<>` is created as a local variable, with default value.
+
+1. `promise_t<>`'s state is passed to the deferred lambda as a capture.
+
+1. After immediate action, `promise_t<>::get_future()` is called explicitly by coroutine just before exit. (Deferred action may or may not ave taken place by now.)
+
+#### Created during co_return
+
+1. During coroutine ramp, `promise_type` is instantiated. Nested structure `promise_t<>` is constructed within `promise_type`. There are no constructor parameters for `promise_t<>`. As a result, the awaitable state's data is initialised to the default value: `T()`.
+
+1. During `co_return`, `promise_type::return_value(rc)` is called, which sets the value of the `promise_t<>`'s state, via `_promise.set_value(rc)`.
+
+1. Next, `promise_type::get_return_object()` calls `_promise.get_future()` which creates the `future_t<>` using the (now resolved) state as the constructor's parameter.
 
 ## Fourth iteration
 
@@ -128,4 +181,3 @@ The version 1 code appeared correct according to the standard; however, it faile
 
 - Remove remaining heap usage.
 - Remove remaining STL dependencies.
-- 
