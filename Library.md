@@ -67,13 +67,13 @@ There are a number of problems with the first iteration.
 
 - The split phase event class `split_phase_event_t` makes use of lambda expressions. These may be considered to fail the transparency objective.
 
-- The split phase event class `split_phase_event_t` makes use of STL's `<functional>`, to store lambda expressions for deferred operations. (These lambdas cannot be stored as function pointers because they use captures.) For the next iteration, therefore, we decided to avoid lambdas and instead to use void function pointers; in place of captures, we will use global static data.
+- The split phase event class `split_phase_event_t` makes use of STL's `<functional>`, to store lambda expressions for deferred operations. (These lambdas cannot be stored as function pointers because they use captures.) In a future iteration, therefore, we will avoid lambdas and instead use void function pointers; in place of captures, we will use global static data.
 
 - `future_t` and its related classes use dynamic memory allocation. Because `future_t` and `promise_t` maintain a shared `awaitable_state_t` via a usage count, the memory is dynamically allocated (through a smart pointer). We will avoid this in the second iteration by by using global static data storage for promise and state.
 
 - The scheduler uses the STL `stack<>` container to hold the current set of blocked coroutines for a task.
 
-- The I2C api is too complex (see [version 1](archive/iteration1/api_i2c.cpp)); it contains too much secondary level code, which should be split out into an implementation layer. Low-level calls which read and write byte arrays should be implemented as asynchronous primitives delivered as coroutines - each matching a synchronous primitive. The current read and write calls should be coroutines composed of these primitives.
+- The I2C api is too complex (see [version 1](archive/iteration1/Sources/api_i2c.cpp)); it contains too much secondary level code, which should be split out into an implementation layer. Low-level calls which read and write byte arrays should be implemented as asynchronous primitives delivered as coroutines - each matching a synchronous primitive. The current read and write calls should be coroutines composed of these primitives.
 
 ## Second iteration
 
@@ -97,7 +97,7 @@ future_t<byte> read_i2c(uint8_t slave_address,
 
 Composition of coroutines (such as the code above) fails with the initial `future_t<>` implementation. The classes `future_t<>` and `promise_t<>` contain both the core code of the classes - including the constructors - and the methods of the awaitable contract. 
 
-Thus the coroutine above attempts to call a constructor for `future_t<>` with all four of the arguments. 
+Thus the coroutine above (which creates a `future_t<>` via `future_t<>::promise_type`)  attempts to call a constructor for `future_t<>` with all four of the arguments. 
 
 ### Objective
 
@@ -139,7 +139,7 @@ The version 1 code appeared correct according to the standard; however, it faile
 
 #### A linked list for coroutines
 
-We must change the architecture - add active coroutine stack to `task_t`, implemented as a linked list. 
+In order to remove `stack<coroutine_handle<>>` (or another dynamic container), we can change the architecture, by adding an active coroutine stack to `task_t`, implemented as a linked list. 
 All awaitables must now inherit from a class which links to the next awaitable.
 
 But which object can become a member of the linked list? The `future<>` is not eligible, because it has move semantics but no copy semantics. Nor is `promise_t<>`, because it is not always created explicitly - the `future_t<>::promise_type` creates the `promise_t<>`.
@@ -175,9 +175,24 @@ First we investigate these in detail, then examine their suitability under the n
 
 1. Next, `promise_type::get_return_object()` calls `_promise.get_future()` which creates the `future_t<>` using the (now resolved) state as the constructor's parameter.
 
+### New contract for shared state pointer
+
+We introduce a new contract for the shared state, `shared_state_ptr_t`:
+
+```c++
+static shared_state_ptr_t 
+  shared_state_ptr_t::make_ptr(...);
+typedef [the contained state type] state_type;
+shared_state_ptr_t& operator=(const shared_state_ptr_t& cp);
+shared_state_ptr_t& operator=(shared_state_ptr_t&& cp);
+```
+
+These allow the `future_t` and the `promise_t` to (i) create a new instance of the shared state pointer, passing the constructor parameters via perfect forwarding, (ii) access the shared data and (iii/iv) copy the pointer into a member variable.
+
 ## Fourth iteration
 
 ### Objectives
 
 - Remove remaining heap usage.
 - Remove remaining STL dependencies.
+- Override memory allocation for `promise_type` and (via `promise_type`) for coroutine stack frame.
