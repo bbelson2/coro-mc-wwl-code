@@ -208,6 +208,21 @@ future_t<word> read_adc3(uint8_t channelId) {
 	return p.get_future();
 }
 
+static_promise_t<word> _read_adc4_promise;
+future_t<word, static_ptr<word>> read_adc4(uint8_t channelId) {
+	auto w = findAdc(channelId);
+	int i = 0;
+	split_phase_event_t::reg(w->measureEventId,
+		[w]() { w->measure(false); },
+		[w, s = _read_adc4_promise._state]() {
+		  word result = 0;
+		  byte rc = w->getValue16(&result);
+		  s->set_value(result); }
+	  );
+	i++;
+	return _read_adc4_promise.get_future();
+}
+
 future_t<bool> transmit_data(uint16_t value) {
 	// TODO - send the data
 	promise_t<bool> p;

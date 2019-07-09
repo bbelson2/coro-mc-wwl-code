@@ -27,6 +27,7 @@ scp::core::future_t<byte> start_adc(uint8_t channelId);
 scp::core::future_t<word> read_adc(uint8_t channelId);
 //scp::core::future_t<word> read_adc2(uint8_t channelId);
 scp::core::future_t<word> read_adc3(uint8_t channelId);
+scp::core::future_t<word, scp::core::static_ptr<word>> read_adc4(uint8_t channelId);
 
 } } // namespace scp::drivers
 

@@ -41,8 +41,8 @@ resumable adcTaskFn(uint8_t pin) {
 	auto oky = co_await scp::drivers::start_adc(ADC_CHANNEL_Y);
 
 	for (;;) {
-		auto x = co_await scp::drivers::read_adc3(ADC_CHANNEL_X);
-		auto y = co_await scp::drivers::read_adc3(ADC_CHANNEL_Y);
+		auto x = co_await scp::drivers::read_adc4(ADC_CHANNEL_X);
+		auto y = co_await scp::drivers::read_adc4(ADC_CHANNEL_Y);
 
 		trace("x,y (accel) [t,i] : %d,%d (%d,%d,%d,%x,%d) [%lu,%lu]\r\n",
 				x, y,

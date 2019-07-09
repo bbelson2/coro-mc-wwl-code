@@ -919,21 +919,51 @@ namespace scp { namespace core {
 		return new counted_awaitable_state<T>{ std::forward<Args>(args)... };
 	}
 
-	/*
-	template <typename T, typename... Args>
-	counted_ptr<T> counted_ptr<T>::make_ptr(Args&&... args) {
-		return make_counted( std::forward<Args>(args)... );
-	}
-	*/
-
-	/*
-	template <typename T, typename... Args>
-	static_ptr<T> make_counted(Args&&... args)
+	template <typename T>
+	struct static_ptr
 	{
-		return nullptr;
-	}
-	*/
+	public:
+		static_ptr(const static_ptr&) = default;
+		static_ptr(static_ptr&& sp) : _p(sp._p)
+		{
+		}
+		static_ptr(awaitable_state<T>* p) : _p(p)
+		{
+		}
+		static_ptr& operator=(const static_ptr& sp)
+		{
+			if (&sp != this)
+			{
+				_p = sp._p;
+			}
+			return *this;
+		}
 
+		static_ptr& operator=(static_ptr&& sp)
+		{
+			if (&sp != this) {
+				_p = sp._p;
+			}
+			return *this;
+		}
+		void set(awaitable_state<T>* p) {
+			_p = p;
+		}
+		awaitable_state<T>* operator->() const
+		{
+			return _p;
+		}
+	private:
+		awaitable_state<T>* _p = nullptr;
+	public:
+		// state_ptr contract in promise_t
+		// Internal equivalent of make_counted()
+		template <typename... Args>
+		static static_ptr<T> make_ptr(Args&&... args) {
+			return static_ptr<T>(nullptr);
+		}
+		typedef awaitable_state<T> state_type;
+	};
 
 	template <typename T, typename shared_state_ptr_t = counted_ptr<awaitable_state<T>>>
 	struct promise_t;
@@ -941,6 +971,7 @@ namespace scp { namespace core {
 	template <typename T, typename shared_state_ptr_t = counted_ptr<awaitable_state<T>>>
 	struct future_t
 	{
+	public:
 		typedef T type;
 		//typedef state_t state_type;
 		typedef shared_state_ptr_t state_ptr_type;
@@ -989,15 +1020,13 @@ namespace scp { namespace core {
 	template <typename T, typename shared_state_ptr_t>
 	struct promise_t
 	{
+	public:
 		typedef future_t<T, shared_state_ptr_t> future_type;
-		//typedef counted_awaitable_state<state_t> state_type;
-		//typedef counted_ptr<state_t> state_ptr_type;
 		typedef shared_state_ptr_t state_ptr_type;
 		shared_state_ptr_t _state;
 
 		// movable not copyable
 		template <typename ...Args>
-		//promise_t(Args&&... args) : _state(make_counted<state_t>(std::forward<Args>(args)...))
 		promise_t(Args&&... args) : _state(shared_state_ptr_t::make_ptr(std::forward<Args>(args)...))
 		{
 		}
@@ -1064,7 +1093,6 @@ namespace scp { namespace core {
 
 		// movable not copyable
 		template <typename ...Args>
-		//promise_t(Args&&... args) : _state(make_counted<state_t>(std::forward<Args>(args)...))
 		promise_t(Args&&... args) : _state(shared_state_ptr_t::make_ptr(std::forward<Args>(args)...))
 		{
 		}
@@ -1100,6 +1128,33 @@ namespace scp { namespace core {
 		{
 			std::terminate();
 		}
+	};
+
+	template <typename T, typename shared_state_ptr_t = static_ptr<T>>
+	struct static_promise_t;
+
+	template <typename T, typename shared_state_ptr_t>
+	struct static_promise_t : public promise_t<T, shared_state_ptr_t>
+	{
+		struct awaitable_state<T> _static_state;
+
+		// copyable, not movable
+		template <typename ...Args>
+		static_promise_t(Args&&... args) : _static_state(std::forward<Args>(args)...)
+		{
+			fix_pointer();
+		}
+		static_promise_t(const static_promise_t&) = delete;
+		static_promise_t(static_promise_t&&) = delete;
+	protected:
+		void fix_pointer() {
+			promise_t<T, shared_state_ptr_t>::_state.set(&_static_state);
+		}
+	};
+
+	template <typename T>
+	struct static_future_t : public future_t<T, static_ptr<awaitable_state<T>>>
+	{
 	};
 
 	// future_of_all is pretty trivial as we can just await on each argument
@@ -1283,15 +1338,6 @@ template<typename T, typename shared_state_ptr_t,
 			// TODO - handle this...
 			std::terminate();
 		}
-		/*
-		bool initial_suspend() const {
-			return (false);
-		}
-
-		bool final_suspend() const {
-			return (false);
-		}
-		*/
 
 		template<class U>
 		void return_value(U&& _Value) {
@@ -1301,9 +1347,48 @@ template<typename T, typename shared_state_ptr_t,
 		void set_exception(exception_ptr ex) {
 			_promise.set_exception(std::move(ex));
 		}
-
 	};
 };
+
+/*
+template<typename T,
+	typename... Args>
+	struct coroutine_traits<scp::core::future_t<T, scp::core::static_ptr<awaitable_state<T>>>, Args...>
+{
+	struct promise_type {
+		scp::core::promise_t<T, shared_state_ptr_t> _promise;
+
+		scp::core::future_t<T, shared_state_ptr_t> get_return_object() {
+			return (_promise.get_future());
+		}
+
+		std::experimental::suspend_never initial_suspend() const
+		{
+			return {};
+		}
+
+		std::experimental::suspend_never final_suspend() const
+		{
+			return {};
+		}
+
+		[[noreturn]] void unhandled_exception()
+		{
+			// TODO - handle this...
+			std::terminate();
+		}
+
+		template<class U>
+		void return_value(U&& _Value) {
+			_promise.set_value(std::forward<U>(_Value));
+		}
+
+		void set_exception(exception_ptr ex) {
+			_promise.set_exception(std::move(ex));
+		}
+	};
+};
+*/
 } }
 
 #endif //def FUTURE_T_VERSION_2
