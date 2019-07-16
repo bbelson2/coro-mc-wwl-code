@@ -44,7 +44,7 @@ resumable i2cTaskFn(uint8_t channel /* ignored */) {
 
 	// Check that the accelerometer is alive
 	uint8_t whoami;
-	byte rc = co_await read_i2c(ACCEL_ADDRESS, 0x0D, &whoami, 1);
+	byte rc = co_await read_i2c_4(ACCEL_ADDRESS, 0x0D, &whoami, 1);
 	__accel_whoami = whoami;
 	if (!rc && (whoami != 0xC7)) {
 		rc = ERR_COMMON;
@@ -52,17 +52,17 @@ resumable i2cTaskFn(uint8_t channel /* ignored */) {
 	}
 
 	if (!rc) {
-		rc = co_await write_i2c(ACCEL_ADDRESS, 0x2A, 0);
+		rc = co_await write_i2c_4(ACCEL_ADDRESS, 0x2A, 0);
 	}
 
 	if (!rc) {
-		rc = co_await write_i2c(ACCEL_ADDRESS, 0x2A, 1);
+		rc = co_await write_i2c_4(ACCEL_ADDRESS, 0x2A, 1);
 	}
 
 	for (;;) {
 		if (!rc) {
 			uint8_t buf[7] = { 0, 0, 0, 0, 0, 0, 0 };
-			rc = co_await read_i2c(ACCEL_ADDRESS, 0x00, buf, sizeof(buf));
+			rc = co_await read_i2c_4(ACCEL_ADDRESS, 0x00, buf, sizeof(buf));
 			if (!rc) {
 				int16_t x = 0, y = 0, z = 0;
 				decodeCoordsFromBuffer(buf, x, y, z);

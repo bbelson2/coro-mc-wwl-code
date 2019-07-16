@@ -144,7 +144,7 @@ void main_cpp()
 
 	// Other setup
 #ifdef INCLUDE_ADC_TASK
-	adcInit();
+	//adcInit();
 #endif
 
 	// Run the program main thread

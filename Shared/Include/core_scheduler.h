@@ -109,6 +109,7 @@ namespace scp { namespace core {
 #else
 			coroutine_handle<> coro = coro_task_;
 			if (!coro_call_stack_.empty()) {
+				//trace("popping coro stack for task %u\r\n", id_);
 				coro = coro_call_stack_.top();
 				coro_call_stack_.pop();
 			}

@@ -13,6 +13,8 @@
 
 #pragma once
 
+#define FUTURE_T_VERSION_4
+
 #ifdef USE_SIMULATOR
 #include <atomic>
 #include <assert.h>
@@ -665,7 +667,9 @@ template<class T,
 };
 } }
 
-#else // FUTURE_T_VERSION_2
+#endif // FUTURE_T_VERSION_2
+
+#ifdef FUTURE_T_VERSION_3
 
 namespace scp { namespace core {
 
@@ -1402,8 +1406,714 @@ template<typename T,
 */
 } }
 
-#endif //def FUTURE_T_VERSION_2
+#endif //define FUTURE_T_VERSION_3
 
+#ifdef FUTURE_T_VERSION_4
+
+namespace scp { namespace core {
+
+	enum struct future_error
+	{
+		not_ready,			// get_value called when value not available
+		already_acquired	// attempt to get another future
+	};
+
+	struct future_exception : std::exception
+	{
+		future_error _error;
+		future_exception(future_error fe) : _error(fe)
+		{
+		}
+	};
+
+	struct awaitable_state_base
+	{
+		std::experimental::coroutine_handle<> _coro;
+		bool _ready = false;
+		bool _future_acquired = false;
+		task_id_t _taskid = scheduler_t::bad_task_id();
+
+		awaitable_state_base() : _taskid(task_t::getRunningTaskId()) { }
+		awaitable_state_base(awaitable_state_base&&) = delete;
+		awaitable_state_base(const awaitable_state_base&) = delete;
+
+		void set_coroutine_callback(std::experimental::coroutine_handle<> cb)
+		{
+#ifdef assert
+			// Test to make sure nothing else is waiting on this future.
+			//assert(((cb == nullptr) || (_coro == nullptr)) && "This future is already being awaited.");
+			assert(((!cb) || (!_coro)) && "This future is already being awaited.");
+#endif
+			_coro = cb;
+		}
+
+		void set_value()
+		{
+			// Set all members first as calling coroutine may reset stuff here.
+			_ready = true;
+			auto coro = _coro;
+			_coro = nullptr;
+			if (coro) {
+				//coro();
+				// Push coro on to queue for scheduler, where it will be matched against a task
+				// and then resumed.
+				scp::core::scheduler_t::getInstance().unblockTask(_taskid, coro);
+			}
+		}
+
+		bool ready() const
+		{
+			return _ready;
+		}
+
+		void reset()
+		{
+			_coro = nullptr;
+			_ready = false;
+			_future_acquired = false;
+		}
+
+		// functions that make this directly awaitable
+		bool await_ready() const
+		{
+			return _ready;
+		}
+
+		void await_suspend(std::experimental::coroutine_handle<> resume_cb)
+		{
+			task_t::blockRunningTask();
+			set_coroutine_callback(resume_cb);
+		}
+	};
+
+	template <typename T>
+	struct awaitable_state : public awaitable_state_base
+	{
+		T _value;
+
+		void set_value(const T& t)
+		{
+			_value = t;
+			awaitable_state_base::set_value();
+		}
+
+		void finalize_value()
+		{
+			awaitable_state_base::set_value();
+		}
+
+		auto get_value()
+		{
+			if (!_ready)
+				throw future_exception{ future_error::not_ready };
+			return _value;
+		}
+
+		void reset()
+		{
+			awaitable_state_base::reset();
+			_value = T{};
+		}
+
+		// make this directly awaitable
+		auto await_resume() const
+		{
+			return _value;
+		}
+	};
+
+	// specialization of awaitable_state<void>
+	template <>
+	struct awaitable_state<void> : public awaitable_state_base
+	{
+		void get_value() const
+		{
+			if (!_ready)
+				throw future_exception{ future_error::not_ready };
+		}
+
+		// make this directly awaitable
+		void await_resume() const
+		{
+		}
+	};
+
+	// We need to be able to manage reference count of the state object in the callback.
+	template <typename awaitable_state_t>
+	struct counted_awaitable_state : public awaitable_state_t
+	{
+#ifdef USE_SIMULATOR
+		std::atomic<int> _count{ 0 }; // tracks reference count of state object
+#else
+		volatile int _count;
+#endif
+
+		template <typename ...Args>
+		counted_awaitable_state(Args&&... args) : _count{ 0 }, awaitable_state_t(std::forward<Args>(args)...)
+		{
+		}
+		counted_awaitable_state(const counted_awaitable_state&) = delete;
+		counted_awaitable_state(counted_awaitable_state&&) = delete;
+
+		counted_awaitable_state* lock()
+		{
+			++_count;
+			return this;
+		}
+
+		void unlock()
+		{
+			if (--_count == 0)
+				delete this;
+		}
+	protected:
+		~counted_awaitable_state() {}
+	};
+
+	// counted_ptr is similar to shared_ptr but allows explicit control
+	//
+
+	template <typename T>
+	struct counted_ptr
+	{
+		counted_ptr() = default;
+		counted_ptr(const counted_ptr& cp) : _p(cp._p)
+		{
+			_lock();
+		}
+
+		counted_ptr(counted_awaitable_state<T>* p) : _p(p)
+		{
+			_lock();
+		}
+
+		counted_ptr(counted_ptr&& cp)
+		{
+			std::swap(_p, cp._p);
+		}
+
+		counted_ptr& operator=(const counted_ptr& cp)
+		{
+			if (&cp != this)
+			{
+				_unlock();
+				_lock(cp._p);
+			}
+			return *this;
+		}
+
+		counted_ptr& operator=(counted_ptr&& cp)
+		{
+			if (&cp != this)
+				std::swap(_p, cp._p);
+			return *this;
+		}
+
+		~counted_ptr()
+		{
+			_unlock();
+		}
+
+		counted_awaitable_state<T>* operator->() const
+		{
+			return _p;
+		}
+
+		counted_awaitable_state<T>* get() const
+		{
+			return _p;
+		}
+
+	protected:
+		void _unlock()
+		{
+			if (_p != nullptr)
+			{
+				auto t = _p;
+				_p = nullptr;
+				t->unlock();
+			}
+		}
+		void _lock(counted_awaitable_state<T>* p)
+		{
+			if (p != nullptr)
+				p->lock();
+			_p = p;
+		}
+		void _lock()
+		{
+			if (_p != nullptr)
+				_p->lock();
+		}
+		counted_awaitable_state<T>* _p = nullptr;
+	public:
+		// state_ptr contract in promise_t
+		// Internal equivalent of make_counted()
+		template <typename... Args>
+		static counted_ptr<T> make_ptr(Args&&... args) {
+			return new counted_awaitable_state<T>{ std::forward<Args>(args)... };
+		}
+		typedef awaitable_state<T> state_type;
+	};
+
+	template <typename T, typename... Args>
+	counted_ptr<T> make_counted(Args&&... args)
+	{
+		return new counted_awaitable_state<T>{ std::forward<Args>(args)... };
+	}
+
+	template <typename T>
+	struct static_ptr
+	{
+	public:
+		static_ptr(const static_ptr&) = default;
+		static_ptr(static_ptr&& sp) : _p(sp._p)
+		{
+		}
+		static_ptr(awaitable_state<T>* p) : _p(p)
+		{
+		}
+		static_ptr& operator=(const static_ptr& sp)
+		{
+			if (&sp != this)
+			{
+				_p = sp._p;
+			}
+			return *this;
+		}
+
+		static_ptr& operator=(static_ptr&& sp)
+		{
+			if (&sp != this) {
+				_p = sp._p;
+			}
+			return *this;
+		}
+		awaitable_state<T>* get() const
+		{
+			return _p;
+		}
+		void set(awaitable_state<T>* p) {
+			_p = p;
+		}
+		awaitable_state<T>* operator->() const
+		{
+			return _p;
+		}
+	private:
+		awaitable_state<T>* _p = nullptr;
+	public:
+		// state_ptr contract in promise_t
+		// Internal equivalent of make_counted()
+		template <typename... Args>
+		static static_ptr<T> make_ptr(Args&&... args) {
+			return static_ptr<T>(nullptr);
+		}
+		typedef awaitable_state<T> state_type;
+	};
+
+	template <typename T, typename shared_state_ptr_t = counted_ptr<awaitable_state<T>>>
+	struct promise_t;
+
+	template <typename T, typename shared_state_ptr_t = counted_ptr<awaitable_state<T>>>
+	struct future_t
+	{
+	public:
+		typedef T type;
+		//typedef state_t state_type;
+		typedef shared_state_ptr_t state_ptr_type;
+		shared_state_ptr_t _state;
+
+		future_t(const shared_state_ptr_t& state) : _state(state)
+		{
+			_state->_taskid = task_t::getRunningTaskId();
+			_state->_future_acquired = true;
+			//trace("Creating future_t\r\n");
+		}
+
+		// movable, but not copyable
+		future_t(const future_t&) = delete;
+		future_t& operator=(const future_t&) = delete;
+		future_t(future_t&& f) = default;
+		future_t& operator=(future_t&&) = default;
+
+		auto await_resume() const
+		{
+			return _state->get_value();
+		}
+
+		bool await_ready() const
+		{
+			return _state->_ready;
+		}
+
+		void await_suspend(std::experimental::coroutine_handle<> resume_cb)
+		{
+			task_t::blockRunningTask();
+			_state->set_coroutine_callback(resume_cb);
+		}
+
+		bool ready() const
+		{
+			return _state->_ready;
+		}
+
+		auto get_value() const
+		{
+			return _state->get_value();
+		}
+	};
+
+	template <typename T, typename shared_state_ptr_t>
+	struct promise_t
+	{
+	public:
+		typedef future_t<T, shared_state_ptr_t> future_type;
+		typedef shared_state_ptr_t state_ptr_type;
+		shared_state_ptr_t _state;
+
+		// movable not copyable
+		template <typename ...Args>
+		promise_t(Args&&... args) : _state(shared_state_ptr_t::make_ptr(std::forward<Args>(args)...))
+		{
+		}
+		promise_t(const promise_t&) = delete;
+		promise_t(promise_t&&) = default;
+
+		future_type get_future()
+		{
+			//trace("promise_t::get_future() with state==null = %d\r\n", _state.get() == nullptr);
+			if (_state->_future_acquired)
+				throw future_exception{ future_error::already_acquired };
+			return future_type(_state);
+		}
+
+		// Most functions don't need this but timers and reads from streams
+		// cause multiple callbacks.
+		future_type next_future()
+		{
+			// reset and return another future
+			if (_state->_future_acquired)
+				_state->reset();
+			return future_type(_state);
+		}
+
+		future_type get_return_object()
+		{
+			return future_type(_state);
+		}
+/*
+		std::experimental::suspend_never initial_suspend() const
+		{
+			return {};
+		}
+
+		std::experimental::suspend_never final_suspend() const
+		{
+			return {};
+		}
+*/
+		void return_value(const T& val)
+		{
+			_state->set_value(val);
+		}
+
+		[[noreturn]] void unhandled_exception()
+		{
+			std::terminate();
+		}
+
+		void set_value(const T& lval) {
+			_state->set_value(lval);
+		}
+		void set_value(T&& rval) {
+			_state->set_value(rval);
+		}
+	};
+
+	template <typename shared_state_ptr_t>
+	struct promise_t<void, shared_state_ptr_t>
+	{
+		typedef future_t<void, shared_state_ptr_t> future_type;
+		//typedef counted_awaitable_state<state_t> state_type;
+		typedef shared_state_ptr_t state_ptr_type;
+		shared_state_ptr_t _state;
+
+		// movable not copyable
+		template <typename ...Args>
+		promise_t(Args&&... args) : _state(shared_state_ptr_t::make_ptr(std::forward<Args>(args)...))
+		{
+		}
+		promise_t(const promise_t&) = delete;
+		promise_t(promise_t&&) = default;
+
+		future_type get_future()
+		{
+			return future_type(_state);
+		}
+
+		future_type get_return_object()
+		{
+			return future_type(_state);
+		}
+
+		std::experimental::suspend_never initial_suspend() const
+		{
+			return {};
+		}
+
+		std::experimental::suspend_never final_suspend() const
+		{
+			return {};
+		}
+
+		void return_void()
+		{
+			_state->set_value();
+		}
+
+		[[noreturn]] void unhandled_exception()
+		{
+			std::terminate();
+		}
+	};
+
+	template <typename T, typename shared_state_ptr_t = static_ptr<T>>
+	struct static_promise_t;
+
+	template <typename T, typename shared_state_ptr_t>
+	struct static_promise_t : public promise_t<T, shared_state_ptr_t>
+	{
+		struct awaitable_state<T> _static_state;
+
+		// copyable, not movable
+		template <typename ...Args>
+		static_promise_t(Args&&... args) : _static_state(std::forward<Args>(args)...)
+		{
+			fix_pointer();
+		}
+		static_promise_t(const static_promise_t&) = delete;
+		static_promise_t(static_promise_t&&) = delete;
+	protected:
+		void fix_pointer() {
+			promise_t<T, shared_state_ptr_t>::_state.set(&_static_state);
+		}
+	};
+} }
+
+namespace std { namespace experimental {
+template<typename T, typename shared_state_ptr_t,
+	typename... Args>
+	struct coroutine_traits<scp::core::future_t<T, shared_state_ptr_t>, Args...>
+{
+	struct promise_type {
+
+		promise_type()
+		{
+			//trace("promise_type::promise_type()\r\n");
+		}
+		scp::core::promise_t<T, shared_state_ptr_t> _promise;
+
+		scp::core::future_t<T, shared_state_ptr_t> get_return_object() {
+			//trace("promise_type::get_return_object before _promise.get_future()\r\n");
+			return (_promise.get_future());
+		}
+
+		std::experimental::suspend_never initial_suspend() const
+		{
+			return {};
+		}
+
+		std::experimental::suspend_never final_suspend() const
+		{
+			return {};
+		}
+
+		[[noreturn]] void unhandled_exception()
+		{
+			// TODO - handle this...
+			std::terminate();
+		}
+
+		template<class U>
+		void return_value(U&& _Value) {
+			_promise.set_value(std::forward<U>(_Value));
+		}
+
+		void set_exception(exception_ptr ex) {
+			_promise.set_exception(std::move(ex));
+		}
+	};
+};
+
+} }
+
+namespace scp { namespace core {
+
+	template <typename T, awaitable_state<T>* PTR>
+	struct sfuture_t;
+
+	template <typename T, awaitable_state<T>* PTR>
+	struct spromise_t;
+
+	template <typename T, awaitable_state<T>* PTR>
+	struct sfuture_t
+	{
+	public:
+		typedef T type;
+		typedef awaitable_state<T> state_type;
+		typedef awaitable_state<T>* state_ptr_type;
+		state_ptr_type _state;
+
+		sfuture_t() : _state(PTR)
+		{
+			_state->_taskid = task_t::getRunningTaskId();
+			_state->_future_acquired = true;
+			//trace("Creating future_t\r\n");
+		}
+
+		// movable, but not copyable
+		sfuture_t(const sfuture_t&) = delete;
+		sfuture_t& operator=(const sfuture_t&) = delete;
+		sfuture_t(sfuture_t&& f) = default;
+		sfuture_t& operator=(sfuture_t&&) = default;
+
+		auto await_resume() const
+		{
+			return _state->get_value();
+		}
+
+		bool await_ready() const
+		{
+			return _state->_ready;
+		}
+
+		void await_suspend(std::experimental::coroutine_handle<> resume_cb)
+		{
+			task_t::blockRunningTask();
+			_state->set_coroutine_callback(resume_cb);
+		}
+
+		bool ready() const
+		{
+			return _state->_ready;
+		}
+
+		auto get_value() const
+		{
+			return _state->get_value();
+		}
+	};
+
+	template <typename T, awaitable_state<T>* PTR>
+	struct spromise_t
+	{
+	public:
+		typedef sfuture_t<T, PTR> future_type;
+		typedef awaitable_state<T> state_type;
+		typedef awaitable_state<T>* state_ptr_type;
+		state_ptr_type _state;
+
+		// movable not copyable
+		template <typename ...Args>
+		spromise_t(Args&&... args) : _state(PTR)
+		{
+		}
+		spromise_t(const spromise_t&) = delete;
+		spromise_t(spromise_t&&) = default;
+
+		future_type get_future()
+		{
+			//trace("promise_t::get_future() with state==null = %d\r\n", _state.get() == nullptr);
+			//if (_state->_future_acquired)
+			//	throw future_exception{ future_error::already_acquired };
+			return future_type();
+		}
+
+		// Most functions don't need this but timers and reads from streams
+		// cause multiple callbacks.
+		future_type next_future()
+		{
+			// reset and return another future
+			if (_state->_future_acquired)
+				_state->reset();
+			return future_type();
+		}
+
+		future_type get_return_object()
+		{
+			return future_type();
+		}
+
+		void return_value(const T& val)
+		{
+			_state->set_value(val);
+		}
+
+		[[noreturn]] void unhandled_exception()
+		{
+			std::terminate();
+		}
+
+		void set_value(const T& lval) {
+			_state->set_value(lval);
+		}
+		void set_value(T&& rval) {
+			_state->set_value(rval);
+		}
+	};
+
+
+} }
+
+namespace std { namespace experimental {
+	template<typename T, scp::core::awaitable_state<T>* PTR,
+	typename... Args>
+	struct coroutine_traits<scp::core::sfuture_t<T, PTR>, Args...>
+	{
+		struct promise_type {
+
+			promise_type()
+			{
+				//trace("promise_type::promise_type()\r\n");
+			}
+			scp::core::spromise_t<T, PTR> _promise;
+
+			scp::core::sfuture_t<T, PTR> get_return_object() {
+				//trace("promise_type::get_return_object before _promise.get_future()\r\n");
+				return (_promise.next_future());
+			}
+
+			std::experimental::suspend_never initial_suspend() const
+			{
+				return {};
+			}
+
+			std::experimental::suspend_never final_suspend() const
+			{
+				return {};
+			}
+
+			[[noreturn]] void unhandled_exception()
+			{
+				// TODO - handle this...
+				std::terminate();
+			}
+
+			template<class U>
+			void return_value(U&& _Value) {
+				_promise.set_value(std::forward<U>(_Value));
+			}
+
+			void set_exception(exception_ptr ex) {
+				_promise.set_exception(std::move(ex));
+			}
+		};
+	};
+
+} }
+
+#endif // defined FUTURE_T_VERSION_4
 
 #endif /* SOURCES_SCHEDULING_FUTURE_H_ */
 
