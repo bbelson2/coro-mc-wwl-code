@@ -132,7 +132,6 @@ The version 1 code appeared correct according to the standard; however, it faile
 
 ### Objectives
 
-- Remove remaining STL `stack<>`, used for blocked coroutine list.
 - Remove heap dependency of `future_t<>` (the shared state).
 
 ### Discussion
@@ -189,10 +188,53 @@ shared_state_ptr_t& operator=(shared_state_ptr_t&& cp);
 
 These allow the `future_t` and the `promise_t` to (i) create a new instance of the shared state pointer, passing the constructor parameters via perfect forwarding, (ii) access the shared data and (iii/iv) copy the pointer into a member variable.
 
+
+```c++
+template <typename T, 
+  typename shared_state_ptr_t = counted_ptr<awaitable_state<T>>>
+struct future_t { ... };
+```
+
+The intent of this approach was to retain a single `future_t<>` class which could be used with both static and dynamic allocation. The dynamic case would continue to be implemented using the `counted_ptr<>` thus:
+
+```c++
+future_t<word, counted_ptr<awaitable_state<word>>> f1;
+future_t<word> f1; // or using the default
+```
+
+The static case would look like this:
+
+```C++
+future_t<word, static_ptr<awaitable_state<word>>> f2;
+```
+
+### Outcome
+
+There are two distinct problems with this approach.
+
+Unfortunately, while this model did not break the existing implementation that uses `counted_ptr<>`, it did not work for the new `static_ptr<>` type. The `future_t<>::promise_type`, which is created by compiler-generated code in the coroutine ramp, contains an embedded `promise_t<>`. Clearly, this type should not be created on-the-fly for the static case, since the new instance will not point to the correct `shared_state`. (For the dynamic case, it is fine, since both the created `promise_t<>` and the original instance both use the same shared memory, which is reference counted.) As a result the program can crash when the wrong shared state is updated by the ISR. The static future **must not** create a promise during its `promise_type` construction.
+
+This behaviour can be enabled by #defining `USE_STATIC_PTR_FOR_READ_I2C` in iteration3.
+
+Secondly, the two forms of the future, `future_t<T, counted_ptr<awaitable_state<T>>> f1` and `future_t<T, static_ptr<awaitable_state<T>>> f2`, do not easily support combinatorial expressions, such as `f1 && f2` or `f1 || f2`, which may be required for parallel or serial invocation by composition helper classes. Indeed, any form of composition becomes significantly more complex.
+
+### Summary
+
+This implementation of the static model works for explicitly created `promise_t<>`s but not for those created implicitly during `co_return`.
+
 ## Fourth iteration
 
 ### Objectives
 
+- Remove remaining STL `stack<>`, used for blocked coroutine list.
+
+- Remove remaining heap usage.
+- Override memory allocation for `promise_type` and (via `promise_type`) for coroutine stack frame.
+
+
+## Remaining issues
+
 - Remove remaining heap usage.
 - Remove remaining STL dependencies.
 - Override memory allocation for `promise_type` and (via `promise_type`) for coroutine stack frame.
+
