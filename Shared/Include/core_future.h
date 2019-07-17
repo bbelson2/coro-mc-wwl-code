@@ -2025,8 +2025,8 @@ namespace scp { namespace core {
 		future_type get_future()
 		{
 			//trace("promise_t::get_future() with state==null = %d\r\n", _state.get() == nullptr);
-			//if (_state->_future_acquired)
-			//	throw future_exception{ future_error::already_acquired };
+			if (_state->_future_acquired)
+				throw future_exception{ future_error::already_acquired };
 			return future_type();
 		}
 

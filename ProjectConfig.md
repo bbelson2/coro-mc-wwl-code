@@ -13,7 +13,7 @@ The Processor Expert (PEx) tools were used to generate hardware access layer cod
 
 1. Switch the Component Inspector to Advanced mode, without Tabs.
 1. Clock settings > Clock source settings. Click minus until only 1 remains.
-1. Clock settings > Clock source settings > Clock source setting 0. > External refernce clock.
+1. Clock settings > Clock source settings > Clock source setting 0. > External reference clock.
 1. OSC0ERCLK clock > `Enabled`
 1. Clock settings > Clock source settings > Clock source setting 0. > MCG settings. 
 1. MCG mode => `PEE` 
