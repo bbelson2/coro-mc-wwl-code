@@ -10,8 +10,6 @@
  */
 
 
-//#include "api_adc.h"
-//#include "api_timer.h"
 #include "task_adc.h"
 #include "Bit1.h"
 #include "AD1.h"
@@ -54,25 +52,28 @@ void fsm::task::adcTaskFn(fsm::core::task_t* task) {
 	{
 		case STEP_START:
 			task_info->progress = STEP_CALIBRATE_ADC1_WAIT;
+			task->block();
 			AD1_Calibrate(false);
 			break;
 		case STEP_CALIBRATE_ADC1_COMPLETE:
 			task_info->progress = STEP_CALIBRATE_ADC2_WAIT;
+			task->block();
 			AD2_Calibrate(false);
 			break;
 		case STEP_CALIBRATE_ADC2_COMPLETE:	// Start
 			task_info->progress = STEP_MEASURE_ADC1_WAIT;
+			task->block();
 			AD1_Measure(false);
 			break;
 		case STEP_MEASURE_ADC1_COMPLETE:	// Start
 			task_info->progress = STEP_MEASURE_ADC2_WAIT;
+			task->block();
 			AD2_Measure(false);
 			break;
 		case STEP_MEASURE_ADC2_COMPLETE:
 			trace("x,y (accel) [t,i] : %d,%d (%d,%d,%d,%x,%d) [%lu,%lu]\r\n",
 							task_info->measure1, task_info->measure2,
-			//				__accel_x, __accel_y, __accel_z, __accel_whoami, __accel_count,
-							0, 0, 0, 0, 0,
+							__accel_x, __accel_y, __accel_z, __accel_whoami, __accel_count,
 			//				__timer_count, __idle_count);
 							0, __idle_count);
 			Bit1_PutVal(++count % 2 == 0);
@@ -84,38 +85,17 @@ void fsm::task::adcTaskFn(fsm::core::task_t* task) {
 	}
 }
 
-/*
-resumable adcTaskFn(uint8_t pin) {
-	co_await suspend_always{};
-
-	auto okx = co_await scp::drivers::start_adc(ADC_CHANNEL_X);
-	auto oky = co_await scp::drivers::start_adc(ADC_CHANNEL_Y);
-
-	for (;;) {
-		auto x = co_await scp::drivers::read_adc4(ADC_CHANNEL_X);
-		auto y = co_await scp::drivers::read_adc4(ADC_CHANNEL_Y);
-
-		trace("x,y (accel) [t,i] : %d,%d (%d,%d,%d,%x,%d) [%lu,%lu]\r\n",
-				x, y,
-				__accel_x, __accel_y, __accel_z, __accel_whoami, __accel_count,
-				__timer_count, __idle_count);
-		Bit1_PutVal(++count % 2 == 0);
-		//co_await scp::drivers::wait_on_ticks(10);
-	}
-}
-*/
-
 // Interrupt service routines
 
-fsm::core::task_t* getTask() {
+static fsm::task::task_t* getTask() {
 	return fsm::core::scheduler_t::getInstance().findTaskPtrById(TASK_ID_ADC);
 }
 
-fsm::task::adc_task_info_t* getTaskData(fsm::core::task_t* task) {
+static fsm::task::adc_task_info_t* getTaskData(fsm::core::task_t* task) {
 	return (fsm::task::adc_task_info_t*)task->getTaskData();
 }
 
-fsm::task::adc_task_info_t* getTaskData() {
+static fsm::task::adc_task_info_t* getTaskData() {
 	fsm::core::task_t* task = getTask();
 	return getTaskData(task);
 }

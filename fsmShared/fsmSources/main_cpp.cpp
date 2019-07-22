@@ -19,7 +19,7 @@
 
 //#undef INCLUDE_IDLE_TASK
 #undef INCLUDE_TIMER_TASK
-#undef INCLUDE_I2C_TASK
+//#undef INCLUDE_I2C_TASK
 #undef INCLUDE_TEST_TASK
 #undef INCLUDE_TEST_ALT_TASK
 #undef INCLUDE_UNUSED_TASK
@@ -55,7 +55,7 @@ extern task_fn_t timerTaskFn;
 
 #ifdef INCLUDE_I2C_TASK
 // I2C task, defined elsewhere
-extern task_fn_t i2cTaskFn;
+#include "task_i2c.h"
 #endif
 
 #if (defined(INCLUDE_TEST_TASK) || defined(INCLUDE_UNUSED_TASK))
@@ -88,8 +88,8 @@ void main_cpp()
 #endif
 
 #ifdef INCLUDE_I2C_TASK
-	resumable i2cTaskFn_ = i2cTaskFn(0);
-	task_t i2cTask(TASK_ID_I2C, task_t::task_state_t::Ready, i2cTaskFn_._coroutine);
+	fsm::task::i2c_task_info_t i2c_task_info = { 0, 0, 0, 0, 0 };
+	task_t i2cTask(TASK_ID_I2C, task_t::task_state_t::Ready, fsm::task::i2cTaskFn, (task_data_t)&i2c_task_info);
 #endif
 
 #ifdef INCLUDE_TEST_TASK

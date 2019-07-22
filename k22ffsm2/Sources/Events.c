@@ -204,9 +204,11 @@ void TU1_OnCounterRestart(LDD_TUserData *UserDataPtr)
 **     Returns     : Nothing
 ** ===================================================================
 */
+extern void task_i2c_OnReceiveData();
 void I2C_OnReceiveData(void)
 {
 	//handle_async_event(EVENT_ID_I2C_RECEIVE);
+	task_i2c_OnReceiveData();
 }
 
 /*
@@ -223,9 +225,11 @@ void I2C_OnReceiveData(void)
 **     Returns     : Nothing
 ** ===================================================================
 */
+extern void task_i2c_OnTransmitData();
 void I2C_OnTransmitData(void)
 {
 	//handle_async_event(EVENT_ID_I2C_TRANSMIT);
+	task_i2c_OnTransmitData();
 }
 
 /* END Events */

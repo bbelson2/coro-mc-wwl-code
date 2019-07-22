@@ -66,14 +66,15 @@ extern void main_cpp();
 1. Run > Debug configurations...
 1. Select GDB PEMicro Interface Debugging
 1. New
-1. Main > C.C++ Application = `DebugLLVM/k22ffsm2.elf`
+1. Main > C.C++ Application = `DebugLLVMc/k22ffsm2.elf`
 1. Debugger > Interface = OpenSDA Embedded Debug - USB Port
 1. Debugger > Port
 
 ### Test
 
+1. Open Device manager and observe the COM port in use by the development board.
 1. PuTTY 
-1. Serial; COM22; 11520
+1. Serial; COMnn (as above); 11520
 1. Open
 1. Debug the configuration above
 1. Observe `Hello K22F world` in terminal - FIX
