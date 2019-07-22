@@ -52,7 +52,7 @@ The following software was used for the development environment.
 
 ## Projects
 
-This repo contains many similar projects to compare performance characteristics using different software environments. The projects are listed below 
+This repo contains many similar projects to compare performance characteristics using different software environments. The projects are listed below. 
 
 | Project | Summary | Technology |
 |---|---|---|

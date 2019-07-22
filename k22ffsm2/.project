@@ -32,9 +32,29 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>Shared</name>
+			<name>Include</name>
 			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Shared</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/Shared/Include</locationURI>
+		</link>
+		<link>
+			<name>IncludeARM</name>
+			<type>2</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Shared/IncludeARM</locationURI>
+		</link>
+		<link>
+			<name>fsmShared</name>
+			<type>2</type>
+			<locationURI>PARENT-1-PROJECT_LOC/fsmShared</locationURI>
+		</link>
+		<link>
+			<name>Sources/min_services.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Shared/Sources/min_services.cpp</locationURI>
+		</link>
+		<link>
+			<name>Sources/services.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Shared/Sources/services.cpp</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

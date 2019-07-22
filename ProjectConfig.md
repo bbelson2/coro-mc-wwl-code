@@ -40,6 +40,115 @@ The Processor Expert (PEx) tools were used to generate hardware access layer cod
 1. Switch to advanced mode; Safe mode => Off 
 1. Check enabled: OnTransmitData & OnReceiveData
 
+### Term1
+
+1. Processor Expert perspective 
+1. Components Library
+1. Term
+1. Component Inspector for Term1 > Inhr1:AsynchroSerial
+1. Settings > Channel = UART1
+1. Settings > Baud rate = 115200 baud
+1. Settings > Receiver > RxD = PTE1
+1. Settings > Transmitter > TxD = PTE0
+
+### ADC1
+
+1. Processor Expert perspective 
+1. Components Library
+1. ADC
+1. Component Inspector for AD1
+1. A/D Converter = ADC0
+1. Interrupt service/event > Interrupt service/event = true
+1. Interrupt service/event > A/D interrupt = INT_ADC0
+1. Interrupt service/event > A/D interrupt priority = medium priority (112)
+1. A/D channels > A/D channel (pin) = ADC0_DM0/ADC1_DM3
+1. Sample time = 20 = long
+1. Conversion time = 17.166138 micro s
+1. Enable methods: Calibrate() and GetCalibrationStatus()
+
+### ADC2
+
+1. Processor Expert perspective 
+1. Components Library
+1. ADC
+1. Component Inspector for AD1
+1. A/D Converter = ADC1
+1. Interrupt service/event > Interrupt service/event = true
+1. Interrupt service/event > A/D interrupt = INT_ADC1
+1. Interrupt service/event > A/D interrupt priority = medium priority (112)
+1. A/D channels > A/D channel (pin) = ADC1_DM1/ADC0_DM3
+1. Sample time = 20 = long
+1. Conversion time = 17.166138 micro s
+1. Enable methods: Calibrate() and GetCalibrationStatus()
+
+### CS1
+
+1. Processor Expert perspective 
+1. Components Library
+1. CriticalSection
+1. Component Inspector for CS1 
+1. Component name = CS1
+1. SDK = MCUC1
+1. Use ProcessorExpert Default = false
+1. Use FreeRTOS = false
+
+### TU1
+
+1. Processor Expert perspective 
+1. Components Library
+1. TimerUnit
+1. Component Inspector for TU1 
+1. Component name = TU1
+1. Device = FTM0_MOD
+1. Counter = FTM0_CNT
+1. Input clock source > Counter frequency = 256 Hz
+1. Counter restart = On-match
+1. Counter restart > Period device = FTM0_MOD
+1. Counter restart > Period = 1 Hz
+1. Counter restart > Interrupt = Enabled
+1. Initialization > Auto initialization = yes
+1. Interrupt service/event = Enabled
+1. Enable: TU1_OnCounterRestart
+
+### FC1
+
+1. Processor Expert perspective 
+1. Components Library
+1. FreeCntr
+1. New Component [Kinetis/TimerUnit_LDD]
+1. Component Inspector for FC1 
+1. Component name = FC1
+1. Device = FTM1_MOD
+1. Counter = FTM1_CNT
+1. Interrupt service/event = Enabled 
+1. Period/offset = 3.125 ms
+1. Interrupt service/event = true
+1. Enable: FC1_OnInterrupt
+
+### I2C
+
+1. Processor Expert perspective 
+1. Components Library
+1. InternalI2C
+1. New Component [Kinetis/InternalI2C]
+1. Component Inspector for CI2C1 
+1. Component name = Rename to I2C
+1. Device = Kinetis/I2C_LDD
+1. I2C channel => I2C0
+1. Mode selection = MASTER
+1. Bits 0-2 of Frequency divider register = 001
+1. Bits 3-5 of Frequency divider register = 100
+1. Internal frequency (multipler factor) = 10.48576 MHz
+1. Interrupt service/event > Interrupt service/event = on
+1. Interrupt service/event > Interrupt = INT_I2C0
+1. Interrupt service/event > Interrupt priority = medium priority (112)
+1. Data and Clock > SDA Pin = PTB3
+1. Data and Clock > SDA CLn = PTB2
+1. MASTER mode > Automatic stop mode = yes
+1. MASTER mode > Initialization > Address mode = 7-bit addressing
+1. MASTER mode > Initialization > Target slave address init = 0x1C
+1. Check enabled: OnTransmitData & OnReceiveData
+
 ## Common settings
 
 The steps below contain detailed instructions for changing the settings of a default project to one that uses the clang compiler and supports C++20 coroutines.

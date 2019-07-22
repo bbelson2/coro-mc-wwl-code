@@ -133,6 +133,7 @@ The version 1 code appeared correct according to the standard; however, it faile
 ### Objectives
 
 - Remove heap dependency of `future_t<>` (the shared state).
+- Remove remaining STL `stack<>`, used for blocked coroutine list.
 
 ### Discussion
 

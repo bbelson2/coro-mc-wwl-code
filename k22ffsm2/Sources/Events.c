@@ -74,9 +74,11 @@ void Cpu_OnNMI(void)
 **     Returns     : Nothing
 ** ===================================================================
 */
+extern void task_adc_ad1_OnEnd();
 void AD1_OnEnd(void)
 {
-	handle_async_event(EVENT_ID_READ_ADCX);
+	//handle_async_event(EVENT_ID_READ_ADCX);
+	task_adc_ad1_OnEnd();
 }
 
 /*
@@ -93,9 +95,11 @@ void AD1_OnEnd(void)
 **     Returns     : Nothing
 ** ===================================================================
 */
+extern void task_adc_ad1_OnCalibrationEnd();
 void AD1_OnCalibrationEnd(void)
 {
-	handle_async_event(EVENT_ID_START_ADCX);
+	//handle_async_event(EVENT_ID_START_ADCX);
+	task_adc_ad1_OnCalibrationEnd();
 }
 
 /*
@@ -112,9 +116,11 @@ void AD1_OnCalibrationEnd(void)
 **     Returns     : Nothing
 ** ===================================================================
 */
+extern void task_adc_ad2_OnEnd();
 void AD2_OnEnd(void)
 {
-	handle_async_event(EVENT_ID_READ_ADCY);
+	//handle_async_event(EVENT_ID_READ_ADCY);
+	task_adc_ad2_OnEnd();
 }
 
 /*
@@ -131,9 +137,11 @@ void AD2_OnEnd(void)
 **     Returns     : Nothing
 ** ===================================================================
 */
+extern void task_adc_ad2_OnCalibrationEnd();
 void AD2_OnCalibrationEnd(void)
 {
-	handle_async_event(EVENT_ID_START_ADCY);
+	//handle_async_event(EVENT_ID_START_ADCY);
+	task_adc_ad2_OnCalibrationEnd();
 }
 
 /*
@@ -155,7 +163,7 @@ void AD2_OnCalibrationEnd(void)
 extern void handle_tick_event();
 void FC1_OnInterrupt(void)
 {
-	handle_tick_event();
+	//handle_tick_event();
 }
 
 /*
@@ -179,7 +187,7 @@ void FC1_OnInterrupt(void)
 /* ===================================================================*/
 void TU1_OnCounterRestart(LDD_TUserData *UserDataPtr)
 {
-	handle_async_event(EVENT_ID_TIMER);
+	//handle_async_event(EVENT_ID_TIMER);
 }
 
 /*
@@ -198,7 +206,7 @@ void TU1_OnCounterRestart(LDD_TUserData *UserDataPtr)
 */
 void I2C_OnReceiveData(void)
 {
-	handle_async_event(EVENT_ID_I2C_RECEIVE);
+	//handle_async_event(EVENT_ID_I2C_RECEIVE);
 }
 
 /*
@@ -217,7 +225,7 @@ void I2C_OnReceiveData(void)
 */
 void I2C_OnTransmitData(void)
 {
-	handle_async_event(EVENT_ID_I2C_TRANSMIT);
+	//handle_async_event(EVENT_ID_I2C_TRANSMIT);
 }
 
 /* END Events */
