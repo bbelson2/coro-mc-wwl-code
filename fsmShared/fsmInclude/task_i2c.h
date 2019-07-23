@@ -25,7 +25,4 @@ extern void i2cTaskFn(task_t*);
 
 } } // namespace fsm::task
 
-
-
-
 #endif /* FSMSHARED_FSMINCLUDE_TASK_I2C_H_ */
