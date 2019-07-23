@@ -163,7 +163,7 @@ void AD2_OnCalibrationEnd(void)
 extern void handle_tick_event();
 void FC1_OnInterrupt(void)
 {
-	//handle_tick_event();
+	handle_tick_event();
 }
 
 /*

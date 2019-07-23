@@ -6,7 +6,7 @@
  */
 
 #include "task_i2c.h"
-//#include "api_timer.h"
+#include "fsmapi_timer.h"
 #include "I2C.h"
 #include "app_ids.h"
 
@@ -34,6 +34,7 @@ enum i2c_task_steps {
 	STEP_READ_WHOAMI_SENDREG_COMPLETE,
 	STEP_READ_WHOAMI_RCVBYTE_WAIT,
 	STEP_READ_WHOAMI_RCVBYTE_COMPLETE,
+	STEP_INITIALISATION_COMPLETE,
 	STEP_WRITE_REG1_0_WAIT,
 	STEP_WRITE_REG1_0_COMPLETE,
 	STEP_WRITE_REG1_1_WAIT,
@@ -45,6 +46,8 @@ enum i2c_task_steps {
 	STEP_TIMER_WAIT,
 	STEP_TIMER_COMPLETE,  // ??
 };
+
+static void task_i2c_afterWait();
 
 void fsm::task::i2cTaskFn(fsm::core::task_t* task) {
 	fsm::task::i2c_task_info_t* task_info = (fsm::task::i2c_task_info_t*)task->getTaskData();
@@ -89,7 +92,9 @@ void fsm::task::i2cTaskFn(fsm::core::task_t* task) {
 			task_info->progress = STEP_START;
 			break;
 		}
-		// TODO - split this step into 2, so that the goto from the end of the for loop goes here
+		task_info->progress = STEP_INITIALISATION_COMPLETE;
+		break;
+	case STEP_INITIALISATION_COMPLETE:
 		// Next - write 0 to Reg1 (ACCEL_ADDRESS, 0x2A)
 		rc = I2C_SelectSlave(ACCEL_ADDRESS);
 		if (rc != ERR_OK) {
@@ -165,7 +170,16 @@ void fsm::task::i2cTaskFn(fsm::core::task_t* task) {
 			__accel_z = z;
 			__accel_count++;
 		}
-		task_info->progress = STEP_READ_WHOAMI_RCVBYTE_COMPLETE;
+		task_info->progress = STEP_TIMER_WAIT;
+		task->block();
+		if (fsm::api::onTimer(100, task_i2c_afterWait) != ERR_OK) {
+			task->unblock();
+			task_info->progress = STEP_READ_WHOAMI_RCVBYTE_COMPLETE;
+		}
+		break;
+	case STEP_TIMER_COMPLETE:
+		task_info->progress = STEP_INITIALISATION_COMPLETE;
+		task->unblock();
 		break;
 	}
 
@@ -219,7 +233,20 @@ void task_i2c_OnTransmitData() {
 		info->progress = STEP_WRITE_REG1_1_COMPLETE;
 		task->unblock();
 		break;
+	case STEP_READ_DATA_SENDREG_WAIT:
+		info->progress = STEP_READ_DATA_SENDREG_COMPLETE;
+		task->unblock();
+		break;
 	}
 }
 
-
+void task_i2c_afterWait() {
+	auto task = getTask();
+	auto info = getTaskData(task);
+	switch (info->progress) {
+	case STEP_TIMER_WAIT:
+		info->progress = STEP_TIMER_COMPLETE;
+		task->unblock();
+		break;
+	}
+}

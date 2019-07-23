@@ -15,6 +15,7 @@
 #include "AD1.h"
 #include "AD2.h"
 #include "app_ids.h"
+#include "fsmapi_timer.h"
 
 /***************************************************************************/
 /* ADC task                                                                */
@@ -43,8 +44,10 @@ enum adc_task_steps {
 	STEP_MEASURE_ADC2_WAIT,
 	STEP_MEASURE_ADC2_COMPLETE,
 	STEP_TIMER_WAIT,
-	STEP_TIMER_COMPLETE,  // ??
+	STEP_TIMER_COMPLETE
 };
+
+static void task_adc_afterWait();
 
 void fsm::task::adcTaskFn(fsm::core::task_t* task) {
 	fsm::task::adc_task_info_t* task_info = (fsm::task::adc_task_info_t*)task->getTaskData();
@@ -77,10 +80,17 @@ void fsm::task::adcTaskFn(fsm::core::task_t* task) {
 			//				__timer_count, __idle_count);
 							0, __idle_count);
 			Bit1_PutVal(++count % 2 == 0);
+
+			task_info->progress = STEP_TIMER_WAIT;
+			task->block();
+			if (fsm::api::onTimer(10, task_adc_afterWait) != ERR_OK) {
+				task->unblock();
+				task_info->progress = STEP_CALIBRATE_ADC2_COMPLETE;
+			}
+			break;
+		case STEP_TIMER_COMPLETE:
 			task_info->progress = STEP_CALIBRATE_ADC2_COMPLETE;
-			// TODO
-			//task_info->progress = STEP_TIMER_WAIT;
-			//startTimer(10);
+			task->unblock();
 			break;
 	}
 }
@@ -135,4 +145,15 @@ void task_adc_ad2_OnEnd()
 	info->measure2 = result;
 	info->progress = STEP_MEASURE_ADC2_COMPLETE;
 	task->unblock();
+}
+
+void task_adc_afterWait() {
+	auto task = getTask();
+	auto info = getTaskData(task);
+	switch (info->progress) {
+	case STEP_TIMER_WAIT:
+		info->progress = STEP_TIMER_COMPLETE;
+		task->unblock();
+		break;
+	}
 }

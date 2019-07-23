@@ -18,7 +18,7 @@
 //#define TEST_BUILD
 
 //#undef INCLUDE_IDLE_TASK
-#undef INCLUDE_TIMER_TASK
+//#undef INCLUDE_TIMER_TASK
 //#undef INCLUDE_I2C_TASK
 #undef INCLUDE_TEST_TASK
 #undef INCLUDE_TEST_ALT_TASK
@@ -44,17 +44,14 @@ using namespace fsm::core;
 #endif
 
 #ifdef INCLUDE_ADC_TASK
-// ADC task, defined elsewhere
 #include "task_adc.h"
 #endif
 
 #ifdef INCLUDE_TIMER_TASK
-// Timer task, defined elsewhere
-extern task_fn_t timerTaskFn;
+#include "task_timer.h"
 #endif
 
 #ifdef INCLUDE_I2C_TASK
-// I2C task, defined elsewhere
 #include "task_i2c.h"
 #endif
 
@@ -83,8 +80,7 @@ void main_cpp()
 #endif
 
 #ifdef INCLUDE_TIMER_TASK
-	resumable timerTaskFn_ = timerTaskFn(0);
-	task_t timerTask(TASK_ID_TIMER, task_t::task_state_t::Ready, timerTaskFn_._coroutine);
+	task_t timerTask(TASK_ID_TIMER, task_t::task_state_t::Ready, fsm::task::timerTaskFn, nullptr);
 #endif
 
 #ifdef INCLUDE_I2C_TASK

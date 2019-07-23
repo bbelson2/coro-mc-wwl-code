@@ -165,10 +165,12 @@
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22ffsm2\Static_Code\System\CPU_Init.h</PathName>
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22ffsm2\Static_Code\System\PDD_Includes.h</PathName>
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22ffsm2\Static_Code\System\Peripherals_Init.h</PathName>
+      <PathName>E:\Source\repos\coro-mc-wwl-code\k22ffsm2\fsmShared\fsmInclude\fsmapi_timer.h</PathName>
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22ffsm2\fsmShared\fsmInclude\fsmbuild.h</PathName>
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22ffsm2\fsmShared\fsmInclude\fsmcore_scheduler.h</PathName>
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22ffsm2\fsmShared\fsmInclude\task_adc.h</PathName>
       <PathName>E:\Source\repos\coro-mc-wwl-code\k22ffsm2\fsmShared\fsmInclude\task_i2c.h</PathName>
+      <PathName>E:\Source\repos\coro-mc-wwl-code\k22ffsm2\fsmShared\fsmInclude\task_timer.h</PathName>
     </GeneratedHs>
   </FILES>
   <OPTIONS>
