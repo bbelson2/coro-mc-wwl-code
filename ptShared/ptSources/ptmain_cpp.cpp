@@ -115,15 +115,28 @@ bool TestTask::Run() {
 	PT_END();
 }
 
+#ifdef MEASURE_COST_OF_SUBROUTINE
+int testCostOfSub(int a, int b) {
+	return a + b;
+}
+volatile int mcos = 0;
+#endif
+
 extern "C"
 void pt_main_cpp()
 {
+#ifdef MEASURE_COST_OF_SUBROUTINE
+#endif
 	//PRINT_STRING("pt_main_cpp (" PTBUILD_DESCRIPTION ")\r\n");
 	TestTask testTaskOn(true);
 	TestTask testTaskOff(false);
 	for (;;) {
 		testTaskOn.Run();
 		testTaskOff.Run();
+#ifdef MEASURE_COST_OF_SUBROUTINE
+		mcos = testCostOfSub(mcos, 1);
+		mcos = testCostOfSub(mcos, 2);
+#endif
 	}
 }
 
